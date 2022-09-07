@@ -1,2 +1,4 @@
-#Math 461. Statistical analysis with R
-[Click for Assignment 1](Assignment-1.html)
+Math 461. Statistical Analysis with R
+_____________________________________
+
+-[Click for Assignment 1](Assignment-1.html)
