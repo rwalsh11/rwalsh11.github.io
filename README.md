@@ -1,5 +1,3 @@
-Math 461. Statistical Analysis with R
+# [Math 461: Statistical Analysis with R]{.underline}
 
--[Click for Assignment 1](Assignment-1.html)
-
-testing
+\-[Click for Assignment 1](Assignment-1.html)
