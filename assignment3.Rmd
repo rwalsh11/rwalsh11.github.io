@@ -102,7 +102,7 @@ summary(covid$State)
 9. Create a new variable `weekdays` to store the weekday for each rows. 
 ```{r}
 
-covid$weekday <- weekdays(covid$Date_Report)
+
 
 ```
 
@@ -111,9 +111,7 @@ covid$weekday <- weekdays(covid$Date_Report)
 - `has_death` if there is a death that day
 -  `no_death` if there is no death that day
 ```{r}
-covid$deaths2 <- case_when(covid$Deaths=0 ~ '',
-                             df$New_deaths<5 ~ 'mid_death',
-                             TRUE~'high_death')
+
 ```
 
 Find the frequency and relative frequency of `no_death` and `has_death`. 
