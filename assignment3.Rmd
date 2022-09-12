@@ -38,29 +38,83 @@ Problems
 
 2. Use `read.csv` to import the Covid19 Vaccination data from WHO: [link](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv).
 ```{r}
-read.csv(Titanic.csv)
+covid <- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
+covid
 ```
 
 2. Show the names of the variables in the data
+```{r}
+names(covid)
+```
+
 
 3. How many columns and rows the data have? 
+```{r}
+colSums(is.na(covid))
+
+```
+```{r}
+rowSums(is.na(covid))
+```
 
 4. How many missing values are there?  Show the missing values by columns.  What variable has the most number of missing values?
+```{r}
+sum(is.na(covid))
+```
+```{r}
+colSums(is.na(covid))
+```
+
 
 5. What is the class of the `date` column. Change the `date` columns to `date` type using the `as.Date` function. Show the new class of the `date` column. 
+```{r}
+class(covid$date)
+names(covid)[1] <- 'Date_report'
+class(covid$Date_report)
+```
+
 
 6. Capitalize the names of all the variables
+```{r}
+names(covid)[1] <- 'Date_Report'
+names(covid)[2] <- 'State'
+names(covid)[3] <- 'Flips'
+names(covid)[4] <- 'Cases'
+names(covid)[5] <- 'Deaths'
+```
+
 
 7. Find the average number of cases per day. Find the maximum cases a day.  
+```{r}
+#average number of cases per day
+mean(covid$Deaths, na.rm=TRUE)
+#maximum cases 
+max(covid$Deaths, na.rm=TRUE)
+```
 
 8. How many states are there in the data?  
 
+```{r}
+table(covid$State)
+summary(covid$State)
+```
+
 9. Create a new variable `weekdays` to store the weekday for each rows. 
+```{r}
+
+covid$weekday <- weekdays(covid$Date_Report)
+
+```
 
 10. Create the categorical variable `death2` variable taking the values as follows
 
 - `has_death` if there is a death that day
 -  `no_death` if there is no death that day
+```{r}
+covid$deaths2 <- case_when(covid$Deaths=0 ~ '',
+                             df$New_deaths<5 ~ 'mid_death',
+                             TRUE~'high_death')
+```
 
 Find the frequency and relative frequency of `no_death` and `has_death`. 
 

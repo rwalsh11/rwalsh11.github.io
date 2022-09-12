@@ -3,3 +3,5 @@
 [Click for Assignment 1](Assignment-1.html)
 
 [Click for Assignment 2](assignment2.html)
+
+[Click for Assignment 3](assignment3.Rmd)
