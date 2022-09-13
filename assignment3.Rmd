@@ -39,7 +39,7 @@ Problems
 2. Use `read.csv` to import the Covid19 Vaccination data from WHO: [link](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv).
 ```{r}
 covid <- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
-covid
+
 ```
 
 2. Show the names of the variables in the data
@@ -50,11 +50,13 @@ names(covid)
 
 3. How many columns and rows the data have? 
 ```{r}
-colSums(is.na(covid))
+
+ncol(covid)
+nrow(covid)
 
 ```
 ```{r}
-rowSums(is.na(covid))
+
 ```
 
 4. How many missing values are there?  Show the missing values by columns.  What variable has the most number of missing values?
@@ -70,6 +72,7 @@ colSums(is.na(covid))
 ```{r}
 class(covid$date)
 names(covid)[1] <- 'Date_report'
+covid$Date_report <-as.Date(covid$Date_report)
 class(covid$Date_report)
 ```
 
@@ -95,14 +98,12 @@ max(covid$Deaths, na.rm=TRUE)
 8. How many states are there in the data?  
 
 ```{r}
-table(covid$State)
-summary(covid$State)
+unique.default(covid$State)
 ```
 
 9. Create a new variable `weekdays` to store the weekday for each rows. 
 ```{r}
-
-
+covid$weekdays <- weekdays.Date(covid$Date_Report)
 
 ```
 
@@ -110,13 +111,25 @@ summary(covid$State)
 
 - `has_death` if there is a death that day
 -  `no_death` if there is no death that day
+Find the frequency and relative frequency of `no_death` and `has_death`. 
+
 ```{r}
+
+covid$death2 <- ifelse(covid$Deaths==0, 
+                        'has_death','no_death')
+table(covid$death2)
+prop.table(table(covid$death2))
 
 ```
 
-Find the frequency and relative frequency of `no_death` and `has_death`. 
+
 
 11. Find the first quartile (Q1), second quartile (Q2) and and third quartile (Q3) of the variable `death`. (Hint:  Use the `summary` function)
+
+```{r}
+summary(covid$Deaths)
+```
+
 
 12. Create the categorical variable `death3` variable taking the values as follows
 
@@ -125,6 +138,11 @@ Find the frequency and relative frequency of `no_death` and `has_death`.
 - `mid_death` if the number of deaths from Q1 to Q3
 
 - `high_death` if the number of deaths greater than Q3
+
+```{r}
+
+```
+
 
 13. Find the average cases in Rhode Island in 2021
 
