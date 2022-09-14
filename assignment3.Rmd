@@ -36,6 +36,11 @@ Problems
 | 2    	| 29  	| Steve 	|
 | 3    	| 42  	| Ricky 	|
 
+```{r}
+data.frame(Rank = c("0","1","2","3"),Age = c("28","34","29","42"), Name = c("Tom","Jack","Steve","Ricky"))
+```
+
+
 2. Use `read.csv` to import the Covid19 Vaccination data from WHO: [link](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv).
 ```{r}
 covid <- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
@@ -168,7 +173,7 @@ by(df1$Deaths,df1$weekdays, median)
 library(lubridate)
 covid$Date_Report <- as.Date(covid$Date_Report)
 covid$month <- month(covid$Date_Report, label = TRUE)
-case_when(covid$Date_Report %in% c('june') ~ 'june',
+q15 <- case_when(covid$Date_Report %in% c('june') ~ 'june',
                        covid$month %in% c('july') ~ 'july',covid$month %in% c('august') ~ 'august',covid$month %in% c('september') ~ 'september',
                        TRUE~'other_months')
 
@@ -194,7 +199,7 @@ str(df)
 
 - names
 ```{r}
-names(df$Survived)
+names(df)
 ```
 
 - mean, min, max
@@ -209,7 +214,7 @@ table(df$Survived)
 
 - is.na
 ```{r}
-is.na(df)
+table(is.na(df))
 ```
 
 - colSums
