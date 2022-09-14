@@ -140,6 +140,7 @@ summary(covid$Deaths)
 - `high_death` if the number of deaths greater than Q3
 
 ```{r}
+library(dplyr)
 covid$death3 <- case_when(covid$Deaths<839 ~ 'low_death',
                              covid$Deaths<12680 ~ 'mid_death',
                              TRUE~'high_death')
