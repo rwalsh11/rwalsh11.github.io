@@ -140,34 +140,130 @@ summary(covid$Deaths)
 - `high_death` if the number of deaths greater than Q3
 
 ```{r}
-
+covid$death3 <- case_when(covid$Deaths<839 ~ 'low_death',
+                             covid$Deaths<12680 ~ 'mid_death',
+                             TRUE~'high_death')
+table(covid$death3)
 ```
 
 
 13. Find the average cases in Rhode Island in 2021
+```{r}
+by(covid$Deaths, covid$State == "Rhode Island", FUN = mean)
+```
+
 
 14. Find the median cases by weekdays in Rhode Island in 2021 
+```{r}
+covid$weekdays <- weekdays(covid$Date_Report)
+df1 = covid[covid$State=='Rhode Island',]
+by(df1$Deaths,df1$weekdays, median)
+```
+
 
 15. Compare the median cases in Rhode Island in June, July, August and September in 2021. 
+
+```{r}
+library(lubridate)
+covid$Date_Report <- as.Date(covid$Date_Report)
+covid$month <- month(covid$Date_Report, label = TRUE)
+case_when(covid$Date_Report %in% c('june') ~ 'june',
+                       covid$month %in% c('july') ~ 'july',covid$month %in% c('august') ~ 'august',covid$month %in% c('september') ~ 'september',
+                       TRUE~'other_months')
+
+df1 = covid[covid$State=='Rhode Island',]
+by(df1$Deaths,df1$month == "june", median)
+by(df1$Deaths,df1$month == "july", median)
+by(df1$Deaths,df1$month == "august", median)
+by(df1$Deaths,df1$month == "september", median)
+```
 
 16.  Find your own dataset, import it and implement the following functions on the data
 
 - head
+```{r}
+df <- read.csv('titanic.csv')
+head(df$Survived)
+```
+
 - str
+```{r}
+str(df)
+```
+
 - names
+```{r}
+names(df$Survived)
+```
+
 - mean, min, max
+```{r}
+summary(df$Survived)
+```
+
 - table
+```{r}
+table(df$Survived)
+```
+
 - is.na
+```{r}
+is.na(df)
+```
+
 - colSums
+```{r}
+colSums(is.na(df))
+```
+
 - class
+```{r}
+class(df)
+```
+
 - cor
+```{r}
+cor(df$PassengerId,df$Survived)
+```
+
 - by
+```{r}
+by(df$Ticket, df$Survived, FUN = mean)
+```
+
 - ifelse
+```{r}
+df$Sex <- ifelse(df$Sex=="male", 
+                        '0','1')
+```
+
 - case_when
+```{r}
+df$Survived <- case_when(df$Survived==0 ~ 'No_new_cases', 
+                            TRUE ~ 'Has_new_cases')
+```
 
 17.  In the dataset in #16, practice the follows.  You can reuse the code of 16. 
 
 - Create a categorical variable from a continuous variable
+```{r}
+df$age2 <- case_when(df$Age<25 ~ 'young',
+                             df$Age<55 ~ 'average',
+                             TRUE~'old')
+table(df$age2)
+```
+
 - From one categorical variable, create a new categorical variable with fewer categories
+
+```{r}
+
+
+
+df$month2 <- case_when(df$SibSp %in% c("0") ~ 'no sib/spouse',
+                       df$SibSp %in% c("1","2") ~ 'average siblings/spouses',TRUE ~ 'lots of siblings/ spouses')
+                  
+
+```
+
 
 If you do not have a data, you can use [the titanic dataset](https://www.kaggle.com/competitions/titanic/overview), which can be downloaded at [this link](../data/titanic.csv)
