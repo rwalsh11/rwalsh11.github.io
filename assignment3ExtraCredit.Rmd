@@ -1,0 +1,79 @@
+---
+title: "Assigment 3 extra data set"
+author: "Ryan Walsh"
+date: "2022-09-16"
+output: html_document
+---
+```{r}
+df <- read.csv('C:/Users/student/Desktop/R Math421/rwalsh11.github.io/adult_census.csv')
+```
+#Head
+```{r}
+head(df$education)
+```
+
+#str
+```{r}
+str(df$marital.status)
+```
+
+#names
+```{r}
+names(df)
+```
+
+#min, max, mean
+```{r}
+summary(df)
+```
+
+#table
+```{r}
+table(df$workclass)
+```
+
+#is.na & colSums
+```{r}
+colSums(is.na(df))
+
+```
+
+
+```{r}
+
+```
+
+#class
+```{r}
+class(df$age)
+class(df$native.country)
+```
+
+#cor
+```{r}
+cor(df$age,df$capital.gain)
+```
+
+#by
+```{r}
+by(df$hours.per.week, df$age >= 55, FUN = mean)
+```
+
+
+#ifelse
+```{r}
+df$sex <- ifelse(df$sex=="male", 
+                        '0','1')
+```
+
+#case when
+```{r}
+
+df$marital.status <- case_when(df$Survived==0 ~ 'No_new_cases', 
+                            TRUE ~ 'Has_new_cases')
+
+```
+
+#Create a categorical variable from a continuous variable
+
+#From one categorical variable, create a new categorical variable with fewer categories
