@@ -95,15 +95,18 @@ names(covid)[5] <- 'Deaths'
 7. Find the average number of cases per day. Find the maximum cases a day.  
 ```{r}
 #average number of cases per day
-mean(covid$Deaths, na.rm=TRUE)
+df1 <-  aggregate(Cases~Date_Report,covid,mean)
 #maximum cases 
-max(covid$Deaths, na.rm=TRUE)
+df2 <- df1[order(-df1$Cases),]
+df2
 ```
 
 8. How many states are there in the data?  
 
 ```{r}
-unique.default(covid$State)
+
+sum(table(unique.default(covid$State)))
+
 ```
 
 9. Create a new variable `weekdays` to store the weekday for each rows. 
