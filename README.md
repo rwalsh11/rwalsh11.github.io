@@ -6,3 +6,5 @@
 
 [Click for Assignment 3](assignment3.html)
 
+[click for assignment 3 extra credit](assignment3ExtraCredit.html)
+

@@ -74,6 +74,10 @@ df$marital.status <- case_when(df$Survived==0 ~ 'No_new_cases',
 
 ```
 
-#Create a categorical variable from a continuous variable
+#Create a categorical variable from a continuous 
+```{r}
+
+```
+
 
 #From one categorical variable, create a new categorical variable with fewer categories
