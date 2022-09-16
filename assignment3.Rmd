@@ -99,6 +99,7 @@ df1 <-  aggregate(Cases~Date_Report,covid,mean)
 #maximum cases 
 df2 <- df1[order(-df1$Cases),]
 df2
+head(df2, n=10)
 ```
 
 8. How many states are there in the data?  
