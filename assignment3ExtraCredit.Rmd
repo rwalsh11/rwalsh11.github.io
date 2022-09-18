@@ -69,8 +69,6 @@ df$sex <- ifelse(df$sex=="male",
 #case when
 ```{r}
 
-df$marital.status <- case_when(df$Survived==0 ~ 'No_new_cases', 
-                            TRUE ~ 'Has_new_cases')
 
 ```
 
