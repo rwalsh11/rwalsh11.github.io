@@ -442,7 +442,7 @@ from WHO: <a href="https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 <pre class="r"><code>ncol(covid)</code></pre>
 <pre><code>## [1] 5</code></pre>
 <pre class="r"><code>nrow(covid)</code></pre>
-<pre><code>## [1] 51358</code></pre>
+<pre><code>## [1] 51526</code></pre>
 <ol start="4" style="list-style-type: decimal">
 <li>How many missing values are there? Show the missing values by
 columns. What variable has the most number of missing values?</li>
@@ -482,16 +482,16 @@ df1 &lt;-  aggregate(Cases~Date_Report,covid,mean)
 df2 &lt;- df1[order(-df1$Cases),]
 head(df2, n=10)</code></pre>
 <pre><code>##     Date_Report   Cases
-## 969  2022-09-15 1703153
+## 972  2022-09-18 1704417
+## 971  2022-09-17 1704323
+## 970  2022-09-16 1704203
+## 969  2022-09-15 1703158
 ## 968  2022-09-14 1701471
 ## 967  2022-09-13 1699405
 ## 966  2022-09-12 1698304
 ## 965  2022-09-11 1696741
 ## 964  2022-09-10 1696537
-## 963  2022-09-09 1696479
-## 962  2022-09-08 1695160
-## 961  2022-09-07 1693581
-## 960  2022-09-06 1691007</code></pre>
+## 963  2022-09-09 1696479</code></pre>
 <ol start="8" style="list-style-type: decimal">
 <li>How many states are there in the data?</li>
 </ol>
@@ -517,11 +517,11 @@ frequency and relative frequency of <code>no_death</code> and
 table(covid$death2)</code></pre>
 <pre><code>## 
 ## has_death  no_death 
-##      1152     50206</code></pre>
+##      1152     50374</code></pre>
 <pre class="r"><code>prop.table(table(covid$death2))</code></pre>
 <pre><code>## 
 ##  has_death   no_death 
-## 0.02243078 0.97756922</code></pre>
+## 0.02235764 0.97764236</code></pre>
 <ol start="11" style="list-style-type: decimal">
 <li>Find the first quartile (Q1), second quartile (Q2) and and third
 quartile (Q3) of the variable <code>death</code>. (Hint: Use the
@@ -529,7 +529,7 @@ quartile (Q3) of the variable <code>death</code>. (Hint: Use the
 </ol>
 <pre class="r"><code>summary(covid$Deaths)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##       0     846    4101   10180   12718   95859</code></pre>
+##       0     852    4115   10208   12747   96175</code></pre>
 <ol start="12" style="list-style-type: decimal">
 <li>Create the categorical variable <code>death3</code> variable taking
 the values as follows</li>
@@ -557,16 +557,16 @@ Q3</p></li>
 table(covid$death3)</code></pre>
 <pre><code>## 
 ## high_death  low_death  mid_death 
-##      12899      12799      25660</code></pre>
+##      12983      12814      25729</code></pre>
 <ol start="13" style="list-style-type: decimal">
 <li>Find the average cases in Rhode Island in 2021</li>
 </ol>
 <pre class="r"><code>by(covid$Deaths, covid$State == &quot;Rhode Island&quot;, FUN = mean)</code></pre>
 <pre><code>## covid$State == &quot;Rhode Island&quot;: FALSE
-## [1] 10325.5
+## [1] 10353.86
 ## ------------------------------------------------------------ 
 ## covid$State == &quot;Rhode Island&quot;: TRUE
-## [1] 2303.379</code></pre>
+## [1] 2307.749</code></pre>
 <ol start="14" style="list-style-type: decimal">
 <li>Find the median cases by weekdays in Rhode Island in 2021</li>
 </ol>
@@ -574,16 +574,16 @@ table(covid$death3)</code></pre>
 df1 = covid[covid$State==&#39;Rhode Island&#39;,]
 by(df1$Deaths,df1$weekdays, median)</code></pre>
 <pre><code>## df1$weekdays: Friday
-## [1] 2719.5
+## [1] 2722
 ## ------------------------------------------------------------ 
 ## df1$weekdays: Monday
 ## [1] 2717
 ## ------------------------------------------------------------ 
 ## df1$weekdays: Saturday
-## [1] 2719.5
+## [1] 2722
 ## ------------------------------------------------------------ 
 ## df1$weekdays: Sunday
-## [1] 2717
+## [1] 2719.5
 ## ------------------------------------------------------------ 
 ## df1$weekdays: Thursday
 ## [1] 2722
@@ -612,16 +612,16 @@ q15 &lt;- case_when(covid$Date_Report %in% c(&#39;june&#39;) ~ &#39;june&#39;,
 df1 = covid[covid$State==&#39;Rhode Island&#39;,]
 by(df1$Deaths,df1$month == &quot;june&quot;, median)</code></pre>
 <pre><code>## df1$month == &quot;june&quot;: FALSE
-## [1] 2719</code></pre>
+## [1] 2722</code></pre>
 <pre class="r"><code>by(df1$Deaths,df1$month == &quot;july&quot;, median)</code></pre>
 <pre><code>## df1$month == &quot;july&quot;: FALSE
-## [1] 2719</code></pre>
+## [1] 2722</code></pre>
 <pre class="r"><code>by(df1$Deaths,df1$month == &quot;august&quot;, median)</code></pre>
 <pre><code>## df1$month == &quot;august&quot;: FALSE
-## [1] 2719</code></pre>
+## [1] 2722</code></pre>
 <pre class="r"><code>by(df1$Deaths,df1$month == &quot;september&quot;, median)</code></pre>
 <pre><code>## df1$month == &quot;september&quot;: FALSE
-## [1] 2719</code></pre>
+## [1] 2722</code></pre>
 <ol start="16" style="list-style-type: decimal">
 <li>Find your own dataset, import it and implement the following
 functions on the data</li>
