@@ -68,14 +68,26 @@ df$sex <- ifelse(df$sex=="male",
 
 #case when
 ```{r}
-
+library(tidyverse)
+library(dplyr)
+df$sex2 <- case_when(df$sex == 1 ~ "man", TRUE ~ "woman")
+table(df$sex2)
 
 ```
 
 #Create a categorical variable from a continuous 
 ```{r}
-
+df$hours.per.week2 <- case_when(df$hours.per.week<35 ~ 'part time',
+                             df$hours.per.week<41 ~ 'average full time',
+                             TRUE~'full time+')
+table(df$hours.per.week2)
 ```
 
 
 #From one categorical variable, create a new categorical variable with fewer categories
+```{r}
+table(df$race)
+df$race2 <- case_when(df$race %in% c("Amer-Indian_Eskimo","Asian-Pac-islander","Black","Other") ~ 'non-white',
+                       TRUE ~ 'white')
+```
+
