@@ -466,6 +466,9 @@ table(df$sex2)</code></pre>
 ##   man 
 ## 32561</code></pre>
 <p>#Create a categorical variable from a continuous</p>
+<pre class="r"><code>summary(df$hours.per.week)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    1.00   40.00   40.00   40.44   45.00   99.00</code></pre>
 <pre class="r"><code>df$hours.per.week2 &lt;- case_when(df$hours.per.week&lt;35 ~ &#39;part time&#39;,
                              df$hours.per.week&lt;41 ~ &#39;average full time&#39;,
                              TRUE~&#39;full time+&#39;)
@@ -482,7 +485,11 @@ with fewer categories</p>
 ##              White 
 ##              27816</code></pre>
 <pre class="r"><code>df$race2 &lt;- case_when(df$race %in% c(&quot;Amer-Indian_Eskimo&quot;,&quot;Asian-Pac-islander&quot;,&quot;Black&quot;,&quot;Other&quot;) ~ &#39;non-white&#39;,
-                       TRUE ~ &#39;white&#39;)</code></pre>
+                       TRUE ~ &#39;white&#39;)
+table(df$race2)</code></pre>
+<pre><code>## 
+## non-white     white 
+##      3395     29166</code></pre>
 
 
 
