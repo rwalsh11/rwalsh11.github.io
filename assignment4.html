@@ -11,7 +11,7 @@
 
 
 
-<title>README</title>
+<title>Assignment 4 - Data Wrangging with dplyr</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -361,18 +361,199 @@ pre code {
 
 
 
+<h1 class="title toc-ignore">Assignment 4 - Data Wrangging with
+<code>dplyr</code></h1>
 
 </div>
 
 
-<div id="math-461-statistical-analysis-with-r" class="section level1">
-<h1>Math 461: Statistical Analysis with R</h1>
-<p><a href="Assignment-1.html">Click for Assignment 1</a></p>
-<p><a href="assignment2.html">Click for Assignment 2</a></p>
-<p><a href="assignment3.html">Click for Assignment 3</a></p>
-<p><a href="assignment3ExtraCredit.html">click for assignment 3 extra
-credit</a></p>
-<p><a href="assignment4.html">click for assignment 4</a></p>
+<p><strong><em>How to do it?</em></strong>:</p>
+<ul>
+<li><p>Open the Rmarkdown file of this assignment (<a href="assignment4.Rmd">link</a>) in Rstudio.</p></li>
+<li><p>Right under each <strong>question</strong>, insert a code chunk
+(you can use the hotkey <code>Ctrl + Alt + I</code> to add a code chunk)
+and code the solution for the question.</p></li>
+<li><p>Notice that if there is <code>eval=FALSE</code> in the first line
+of the code chunk, the chunk will not be execute.</p></li>
+<li><p><code>Knit</code> the rmarkdown file (hotkey:
+<code>Ctrl + Alt + K</code>) to export an html.</p></li>
+<li><p>Publish the html file to your Githiub Page.</p></li>
+</ul>
+<p><strong><em>Submission</em></strong>: Submit the link on Github of
+the assignment to Canvas under Assignment 4.</p>
+<hr />
+<div id="install-tidyverse-package" class="section level4">
+<h4>1. Install <code>tidyverse</code> package</h4>
+<p>An R package can be installed by <code>install.packages</code>
+function. Install <code>tidyverse</code> if you have not done so.</p>
+<pre class="r"><code>install.packages(&#39;tidyverse&#39;)</code></pre>
+<hr />
+</div>
+<div id="read-the-data-using-read_csv" class="section level4">
+<h4>2. Read the data using <code>read_csv</code></h4>
+<p>Use <code>read_csv</code> function to import the US Covid 19 data at
+<a href="https://covidtracking.com/data/download/all-states-history.csv">link</a>.
+Don’t forget to import <code>tidyverse</code> (library(tidyverse)) so
+that you can use read_csv.</p>
+<pre class="r"><code>library(tidyverse)
+df &lt;- read_csv(&quot;all-states-history.csv&quot;, col_types = cols(.default = &quot;c&quot;))
+problems(&quot;all-states-history.csv&quot;)</code></pre>
+<hr />
+</div>
+<div id="fix-the-date-and-ceate-some-new-variables" class="section level4">
+<h4>3. Fix the date and ceate some new variables</h4>
+<p><code>lubridate</code> is a package of the <code>tidyverse</code>
+packages. We will make uses of <code>lubridate</code> in this
+question.</p>
+<ul>
+<li>Use the below codes to create <code>month</code>,
+<code>weekday</code> and <code>monthday</code> variables</li>
+</ul>
+<pre class="r"><code>library(lubridate)
+df$month = month(df$date)
+
+# day of the week
+df$weekday = wday(df$date)
+
+# day of the month
+df$monthday &lt;- mday(df$date)</code></pre>
+<hr />
+</div>
+<div id="create-new-variables-with-case_when." class="section level4">
+<h4>4. Create new variables with <code>case_when</code>.</h4>
+<p>The function <code>case_when</code> is a good option to create a new
+variable from existing variable. For example, this below codes create a
+new variable, <code>daily_death</code>, from <code>deathIncrease</code>
+variable. <code>deathIncrease</code> is the number of daily new death by
+Covid19. The new variable <code>daily_death</code> takes three values:
+low (if <code>deathIncrease</code> less than 3), medium
+(<code>deathIncrease</code> from 3 to 14), and high
+(<code>deathIncrease</code> more than 14). Please notice that this can
+also be done in a different way as shown in Assignment 3.</p>
+<pre class="r"><code>library(tidyverse)
+library(dplyr)
+df$daily_death &lt;- case_when(
+  df$deathIncrease &lt;3 ~ &#39;low&#39;,
+  df$deathIncrease &lt;=14 ~ &#39;medium&#39;,
+  TRUE ~ &#39;high&#39;
+)</code></pre>
+<ul>
+<li>Create variable <code>month2</code> that takes three values:
+early_month (day of the month from 1-10), mid_month (day of the month
+from 11-20), and end_month (day of the month &gt; 20).</li>
+</ul>
+<pre class="r"><code>library(tidyverse)
+library(dplyr)
+df$month2&lt;- case_when(
+  df$monthday &lt;=10 ~ &#39;early_month&#39;,
+  df$monthday &lt;=20 ~ &#39;mid_month&#39;,
+  TRUE ~ &#39;end_month&#39;
+)
+table(df$month2)</code></pre>
+<pre><code>## 
+## early_month   end_month   mid_month 
+##        6934        7087        6759</code></pre>
+<ul>
+<li>Create variable <code>weekend</code> that takes two values: 1 if
+it’s Saturday or Sunday or 0 otherwise.</li>
+</ul>
+<pre class="r"><code>df$weekend &lt;- case_when(df$weekday == &quot;6&quot; ~&quot;1&quot;,df$weekday == &quot;7&quot;~&quot;0&quot; )
+table(df$weekend)</code></pre>
+<pre><code>## 
+##    0    1 
+## 2989 2976</code></pre>
+<hr />
+</div>
+<div id="select-function" class="section level4">
+<h4>5. Select function</h4>
+<p>Use the select function to deselect the column
+<code>totalTestsViral</code> from the data.</p>
+<hr />
+</div>
+<div id="pipe-operator" class="section level4">
+<h4>6. Pipe Operator ( %&gt;% )</h4>
+<p>Pipe operator offers another way to write R codes. Many times, it
+makes the codes more readable. Pipe works very well with all the
+<code>tidyverse</code> packages. Refer to <a href="../slides/4_dplyr.html#15">these slides</a> (slide 15, 16, 17 and
+18) to rewrite the below codes using pipe operator</p>
+<pre class="r"><code>x &lt;- c(1:10)
+
+# square root of x
+sqrt(x)
+
+sum(sqrt(x))
+
+log(sum(sqrt(x)))
+
+# log base 2 of 16
+log(16, 2)</code></pre>
+<hr />
+</div>
+<div id="combo-1-group_by-summarise" class="section level4">
+<h4>7. Combo 1: group_by + summarise</h4>
+<p>This combo is used when you want to apply a function/calculation to
+different groups of the data. For example, to calculate the average
+number of cases (<code>positiveIncrease</code>) by
+<code>dataQualityGrade</code>, we use:</p>
+<pre class="r"><code>df %&gt;% 
+  group_by(weekday) %&gt;% 
+  summarise(mean(positiveIncrease))</code></pre>
+<ul>
+<li><p>Calculate the median number of cases
+(<code>positiveIncrease</code>) by <code>month</code></p></li>
+<li><p>Calculate the average number of cases
+(<code>positiveIncrease</code>) by <code>month2</code></p></li>
+<li><p>Calculate the median number of cases
+(<code>positiveIncrease</code>) by <code>weekend</code></p></li>
+</ul>
+<hr />
+</div>
+<div id="combo-2-filter-group_by-summarise" class="section level4">
+<h4>8. Combo 2: filter + group_by + summarise</h4>
+<p>An example: to calculate the average number of cases
+(<code>positiveIncrease</code>) in January and February separately, we
+use:</p>
+<pre class="r"><code>df %&gt;% 
+  filter(month==1|month==2) %&gt;% 
+  group_by(month) %&gt;% 
+  summarise(positve_increase = mean(positiveIncrease))</code></pre>
+<ul>
+<li><p>Calculate the median number of cases
+(<code>positiveIncrease</code>) on the weekend by <code>month</code> in
+October and November 2020.</p></li>
+<li><p>Calculate the average number of death at different periods of a
+month (<code>month2</code> variable) in Fall 2020</p></li>
+<li><p>Compare the average number of hospitalizations between weekdays
+and weekends in Summer 2020</p></li>
+<li><p>Redo Questions 14 and 15 in <a href="assignment3.html">Assignment
+3</a> using the combos. Notice: you also need to use the data used in
+Assignment 3.</p></li>
+</ul>
+<hr />
+</div>
+<div id="combo-3-filter-group_by-summarise-arrange" class="section level4">
+<h4>9. Combo 3: filter + group_by + summarise + arrange</h4>
+<p>Use the arrange function to find a month that has the highest number
+of deaths on the weekend.</p>
+<hr />
+</div>
+<div id="use-your-own-dataset-and-implement-the-follows-functions-or-combos.-you-can-use-the-adult-census-income-or-titanic-data." class="section level4">
+<h4>10. Use your own dataset and implement the follows functions or
+combos. You can use the <a href="../data/adult_census.csv">Adult Census
+Income</a> or <a href="../data/titanic.csv">Titanic data</a>.</h4>
+<ul>
+<li>select</li>
+<li>filter</li>
+<li>mutate</li>
+<li>summarise</li>
+<li>arrange</li>
+<li>count</li>
+<li>count + arrange</li>
+<li>filter + count + arrange</li>
+<li>group_by + summarise</li>
+<li>filter + group_by + summarise</li>
+<li>filter + group_by + summarise + arrange</li>
+</ul>
 </div>
 
 
