@@ -42,8 +42,7 @@ install.packages('tidyverse')
 Use `read_csv` function to import the US Covid 19 data at [link](https://covidtracking.com/data/download/all-states-history.csv).  Don't forget to import `tidyverse` (library(tidyverse)) so that you can use read_csv. 
 ```{r}
 library(tidyverse)
-df <- read_csv("all-states-history.csv", col_types = cols(.default = "c"))
-problems("all-states-history.csv")
+df <- read_csv("all-states-history.csv")
 ```
 
 -------
@@ -106,8 +105,15 @@ table(df$weekend)
 #### 5. Select function
 
 Use the select function to deselect the column `totalTestsViral` from the data.
+```{r}
+library(dplyr)
+head(subset(df, select = -totalTestsViral),n = 10)
+
+```
+
 
 -------
+
 
 #### 6. Pipe Operator ( %>% )
 
@@ -118,14 +124,14 @@ x <- c(1:10)
 
 # square root of x
 sqrt(x)
-
+x %>% sqrt
 sum(sqrt(x))
-
+x %>% sqrt %>% sum
 log(sum(sqrt(x)))
-
+x %>% sqrt %>% sum %>% log
 # log base 2 of 16
 log(16, 2)
-
+16 %>% log2
 ```
 
 -------
@@ -135,16 +141,40 @@ log(16, 2)
 This combo is used when you want to apply a function/calculation to different groups of the data. For example, to calculate the average number of cases (`positiveIncrease`) by `dataQualityGrade`, we use:
 
 ```{r, eval=FALSE}
+df$weekday = wday(df$date)
 df %>% 
   group_by(weekday) %>% 
-  summarise(mean(positiveIncrease))
+  summarise(mean(positiveIncrease, na.rm=TRUE))
 ```
 
 - Calculate the median number of cases (`positiveIncrease`) by `month`
+```{r}
+df$month <- month(df$date)
+df %>% 
+  group_by(month) %>% 
+  summarise(median(positiveIncrease))
+```
+
 
 - Calculate the average number of cases (`positiveIncrease`) by `month2`
+```{r}
+library(dplyr)
+df$month2<- case_when(
+  df$monthday <=10 ~ 'early_month',
+  df$monthday <=20 ~ 'mid_month',
+  TRUE ~ 'end_month'
+)
+df %>% 
+  group_by(month2) %>% 
+  summarise(mean(positiveIncrease))
+```
 
 - Calculate the median number of cases (`positiveIncrease`) by `weekend`
+```{r}
+df %>% 
+  group_by(weekend) %>% 
+  summarise(median(positiveIncrease))
+```
 
 
 -------
@@ -153,7 +183,7 @@ df %>%
 
 An example: to calculate the average number of cases (`positiveIncrease`) in January and February separately, we use:
 
-```{r, eval=FALSE}
+```{r}
 df %>% 
   filter(month==1|month==2) %>% 
   group_by(month) %>% 
@@ -161,16 +191,55 @@ df %>%
 ```
 
 - Calculate the median number of cases (`positiveIncrease`) on the weekend by `month` in October and November 2020. 
+```{r}
+df %>% filter(weekday == 6 |weekday == 7)%>% 
+  filter(month==10|month==11) %>% 
+  group_by(month) %>% 
+  summarise(positve_increase = median(positiveIncrease))
+```
+
 
 - Calculate the average number of death at different periods of a month (`month2` variable) in Fall 2020
+```{r}
+df$month2<- case_when(
+  df$monthday <=10 ~ 'early_month',
+  df$monthday <=20 ~ 'mid_month',
+  TRUE ~ 'end_month'
+)
+df %>%
+  filter(month==9|month==10|month ==11) %>% 
+  group_by(month2) %>% 
+  summarise(positve_increase = mean(positiveIncrease))
+```
 
 - Compare the average number of hospitalizations between weekdays and weekends in Summer 2020
+```{r}
+df %>%
+  filter(month==6|month == 7|month == 8) %>% 
+  group_by(weekday == 7| weekday == 6) %>% 
+  summarise(positve_increase = mean(positiveIncrease))
+df %>%
+  filter(month==6|month == 7|month == 8) %>% 
+  group_by(weekday == 1| weekday == 2| weekday == 3| weekday == 4| weekday == 5) %>% 
+  summarise(positve_increase = mean(positiveIncrease))
+
+```
 
 - Redo Questions 14 and 15 in [Assignment 3](assignment3.html) using the combos.  Notice:  you also need to use the data used in Assignment 3.  
 
 -------
 
 #### 9. Combo 3: filter + group_by + summarise + arrange
+```{r}
+df <- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
+library(lubridate)
+
+df$Date_Report <- as.Date(df$date)
+df$weekdays <- weekdays(df$Date_Report)
+df1 = df[df$State=='Rhode Island',]
+by(df1$Deaths,df1$weekdays, median)
+
+```
 
 Use the arrange function to find a month that has the highest number of deaths on the weekend. 
 

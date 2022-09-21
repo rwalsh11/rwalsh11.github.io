@@ -396,8 +396,8 @@ function. Install <code>tidyverse</code> if you have not done so.</p>
 Don’t forget to import <code>tidyverse</code> (library(tidyverse)) so
 that you can use read_csv.</p>
 <pre class="r"><code>library(tidyverse)
-df &lt;- read_csv(&quot;all-states-history.csv&quot;, col_types = cols(.default = &quot;c&quot;))
-problems(&quot;all-states-history.csv&quot;)</code></pre>
+df &lt;- read_csv(&quot;all-states-history.csv&quot;)</code></pre>
+<pre><code>## Warning: One or more parsing issues, see `problems()` for details</code></pre>
 <hr />
 </div>
 <div id="fix-the-date-and-ceate-some-new-variables" class="section level4">
@@ -468,6 +468,28 @@ table(df$weekend)</code></pre>
 <h4>5. Select function</h4>
 <p>Use the select function to deselect the column
 <code>totalTestsViral</code> from the data.</p>
+<pre class="r"><code>library(dplyr)
+head(subset(df, select = -totalTestsViral),n = 10)</code></pre>
+<pre><code>## # A tibble: 10 × 46
+##    date       state death deathConfirmed death…¹ death…² hospi…³ hospi…⁴ hospi…⁵
+##    &lt;date&gt;     &lt;chr&gt; &lt;dbl&gt;          &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 2021-03-07 AK      305             NA       0      NA    1293    1293      33
+##  2 2021-03-07 AL    10148           7963      -1    2185   45976   45976     494
+##  3 2021-03-07 AR     5319           4308      22    1011   14926   14926     335
+##  4 2021-03-07 AS        0             NA       0      NA      NA      NA      NA
+##  5 2021-03-07 AZ    16328          14403       5    1925   57907   57907     963
+##  6 2021-03-07 CA    54124             NA     258      NA      NA      NA    4291
+##  7 2021-03-07 CO     5989           5251       3     735   23904   23904     326
+##  8 2021-03-07 CT     7704           6327       0    1377      NA      NA     428
+##  9 2021-03-07 DC     1030             NA       0      NA      NA      NA     150
+## 10 2021-03-07 DE     1473           1337       9     136      NA      NA     104
+## # … with 37 more variables: hospitalizedIncrease &lt;dbl&gt;, inIcuCumulative &lt;dbl&gt;,
+## #   inIcuCurrently &lt;dbl&gt;, negative &lt;dbl&gt;, negativeIncrease &lt;dbl&gt;,
+## #   negativeTestsAntibody &lt;dbl&gt;, negativeTestsPeopleAntibody &lt;lgl&gt;,
+## #   negativeTestsViral &lt;dbl&gt;, onVentilatorCumulative &lt;dbl&gt;,
+## #   onVentilatorCurrently &lt;dbl&gt;, positive &lt;dbl&gt;, positiveCasesViral &lt;dbl&gt;,
+## #   positiveIncrease &lt;dbl&gt;, positiveScore &lt;dbl&gt;, positiveTestsAntibody &lt;dbl&gt;,
+## #   positiveTestsAntigen &lt;dbl&gt;, positiveTestsPeopleAntibody &lt;lgl&gt;, …</code></pre>
 <hr />
 </div>
 <div id="pipe-operator" class="section level4">
@@ -480,13 +502,14 @@ makes the codes more readable. Pipe works very well with all the
 
 # square root of x
 sqrt(x)
-
+x %&gt;% sqrt
 sum(sqrt(x))
-
+x %&gt;% sqrt %&gt;% sum
 log(sum(sqrt(x)))
-
+x %&gt;% sqrt %&gt;% sum %&gt;% log
 # log base 2 of 16
-log(16, 2)</code></pre>
+log(16, 2)
+16 %&gt;% log2</code></pre>
 <hr />
 </div>
 <div id="combo-1-group_by-summarise" class="section level4">
@@ -495,17 +518,65 @@ log(16, 2)</code></pre>
 different groups of the data. For example, to calculate the average
 number of cases (<code>positiveIncrease</code>) by
 <code>dataQualityGrade</code>, we use:</p>
-<pre class="r"><code>df %&gt;% 
+<pre class="r"><code>df$weekday = wday(df$date)
+df %&gt;% 
   group_by(weekday) %&gt;% 
-  summarise(mean(positiveIncrease))</code></pre>
+  summarise(mean(positiveIncrease, na.rm=TRUE))</code></pre>
 <ul>
-<li><p>Calculate the median number of cases
-(<code>positiveIncrease</code>) by <code>month</code></p></li>
-<li><p>Calculate the average number of cases
-(<code>positiveIncrease</code>) by <code>month2</code></p></li>
-<li><p>Calculate the median number of cases
-(<code>positiveIncrease</code>) by <code>weekend</code></p></li>
+<li>Calculate the median number of cases (<code>positiveIncrease</code>)
+by <code>month</code></li>
 </ul>
+<pre class="r"><code>df$month &lt;- month(df$date)
+df %&gt;% 
+  group_by(month) %&gt;% 
+  summarise(median(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 12 × 2
+##    month `median(positiveIncrease)`
+##    &lt;dbl&gt;                      &lt;dbl&gt;
+##  1     1                      1517 
+##  2     2                       520 
+##  3     3                        19 
+##  4     4                       156 
+##  5     5                       206 
+##  6     6                       224.
+##  7     7                       444 
+##  8     8                       415 
+##  9     9                       456.
+## 10    10                       771 
+## 11    11                      1596.
+## 12    12                      2080.</code></pre>
+<ul>
+<li>Calculate the average number of cases
+(<code>positiveIncrease</code>) by <code>month2</code></li>
+</ul>
+<pre class="r"><code>library(dplyr)
+df$month2&lt;- case_when(
+  df$monthday &lt;=10 ~ &#39;early_month&#39;,
+  df$monthday &lt;=20 ~ &#39;mid_month&#39;,
+  TRUE ~ &#39;end_month&#39;
+)
+df %&gt;% 
+  group_by(month2) %&gt;% 
+  summarise(mean(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   month2      `mean(positiveIncrease)`
+##   &lt;chr&gt;                          &lt;dbl&gt;
+## 1 early_month                    1416.
+## 2 end_month                      1342.
+## 3 mid_month                      1395.</code></pre>
+<ul>
+<li>Calculate the median number of cases (<code>positiveIncrease</code>)
+by <code>weekend</code></li>
+</ul>
+<pre class="r"><code>df %&gt;% 
+  group_by(weekend) %&gt;% 
+  summarise(median(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   weekend `median(positiveIncrease)`
+##   &lt;chr&gt;                        &lt;dbl&gt;
+## 1 0                              433
+## 2 1                              533
+## 3 &lt;NA&gt;                           418</code></pre>
 <hr />
 </div>
 <div id="combo-2-filter-group_by-summarise" class="section level4">
@@ -517,22 +588,81 @@ use:</p>
   filter(month==1|month==2) %&gt;% 
   group_by(month) %&gt;% 
   summarise(positve_increase = mean(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   month positve_increase
+##   &lt;dbl&gt;            &lt;dbl&gt;
+## 1     1            3448.
+## 2     2            1378.</code></pre>
 <ul>
-<li><p>Calculate the median number of cases
-(<code>positiveIncrease</code>) on the weekend by <code>month</code> in
-October and November 2020.</p></li>
-<li><p>Calculate the average number of death at different periods of a
-month (<code>month2</code> variable) in Fall 2020</p></li>
-<li><p>Compare the average number of hospitalizations between weekdays
-and weekends in Summer 2020</p></li>
-<li><p>Redo Questions 14 and 15 in <a href="assignment3.html">Assignment
+<li>Calculate the median number of cases (<code>positiveIncrease</code>)
+on the weekend by <code>month</code> in October and November 2020.</li>
+</ul>
+<pre class="r"><code>df %&gt;% filter(weekday == 6 |weekday == 7)%&gt;% 
+  filter(month==10|month==11) %&gt;% 
+  group_by(month) %&gt;% 
+  summarise(positve_increase = median(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   month positve_increase
+##   &lt;dbl&gt;            &lt;dbl&gt;
+## 1    10              921
+## 2    11             2010</code></pre>
+<ul>
+<li>Calculate the average number of death at different periods of a
+month (<code>month2</code> variable) in Fall 2020</li>
+</ul>
+<pre class="r"><code>df$month2&lt;- case_when(
+  df$monthday &lt;=10 ~ &#39;early_month&#39;,
+  df$monthday &lt;=20 ~ &#39;mid_month&#39;,
+  TRUE ~ &#39;end_month&#39;
+)
+df %&gt;%
+  filter(month==9|month==10|month ==11) %&gt;% 
+  group_by(month2) %&gt;% 
+  summarise(positve_increase = mean(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 3 × 2
+##   month2      positve_increase
+##   &lt;chr&gt;                  &lt;dbl&gt;
+## 1 early_month            1218.
+## 2 end_month              1672.
+## 3 mid_month              1554.</code></pre>
+<ul>
+<li>Compare the average number of hospitalizations between weekdays and
+weekends in Summer 2020</li>
+</ul>
+<pre class="r"><code>df %&gt;%
+  filter(month==6|month == 7|month == 8) %&gt;% 
+  group_by(weekday == 7| weekday == 6) %&gt;% 
+  summarise(positve_increase = mean(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   `weekday == 7 | weekday == 6` positve_increase
+##   &lt;lgl&gt;                                    &lt;dbl&gt;
+## 1 FALSE                                     781.
+## 2 TRUE                                      895.</code></pre>
+<pre class="r"><code>df %&gt;%
+  filter(month==6|month == 7|month == 8) %&gt;% 
+  group_by(weekday == 1| weekday == 2| weekday == 3| weekday == 4| weekday == 5) %&gt;% 
+  summarise(positve_increase = mean(positiveIncrease))</code></pre>
+<pre><code>## # A tibble: 2 × 2
+##   `... | weekday == 5` positve_increase
+##   &lt;lgl&gt;                           &lt;dbl&gt;
+## 1 FALSE                            895.
+## 2 TRUE                             781.</code></pre>
+<ul>
+<li>Redo Questions 14 and 15 in <a href="assignment3.html">Assignment
 3</a> using the combos. Notice: you also need to use the data used in
-Assignment 3.</p></li>
+Assignment 3.</li>
 </ul>
 <hr />
 </div>
 <div id="combo-3-filter-group_by-summarise-arrange" class="section level4">
 <h4>9. Combo 3: filter + group_by + summarise + arrange</h4>
+<pre class="r"><code>df &lt;- read.csv(&#39;https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv&#39;)
+library(lubridate)
+
+df$Date_Report &lt;- as.Date(df$date)
+df$weekdays &lt;- weekdays(df$Date_Report)
+df1 = df[df$State==&#39;Rhode Island&#39;,]
+by(df1$Deaths,df1$weekdays, median)</code></pre>
 <p>Use the arrange function to find a month that has the highest number
 of deaths on the weekend.</p>
 <hr />
