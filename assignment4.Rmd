@@ -230,31 +230,101 @@ df %>%
 -------
 
 #### 9. Combo 3: filter + group_by + summarise + arrange
+Use the arrange function to find a month that has the highest number of deaths on the weekend. 
 ```{r}
 df <- read.csv('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
 library(lubridate)
 
 df$Date_Report <- as.Date(df$date)
 df$weekdays <- weekdays(df$Date_Report)
+df$month <- month(df$Date_Report)
 df1 = df[df$State=='Rhode Island',]
 by(df1$Deaths,df1$weekdays, median)
 
+df %>% 
+  filter(weekdays == '6' |weekdays == '7') %>% 
+  group_by(month) %>% 
+  summarise(average_deaths = mean(deaths)) %>% 
+  arrange(-average_deaths)
 ```
 
-Use the arrange function to find a month that has the highest number of deaths on the weekend. 
+
 
 -------
 
 #### 10. Use your own dataset and implement the follows functions or combos. You can use the [Adult Census Income](../data/adult_census.csv) or [Titanic data](../data/titanic.csv). 
+```{r}
+df <- read.csv('C:/Users/student/Desktop/R Math421/rwalsh11.github.io/adult_census.csv')
+
+```
 
 - select
+```{r}
+head(df %>% select(age),n = 10)
+```
+
 - filter
+```{r}
+df %>% 
+  filter(education.num == 10) %>% 
+  group_by(age) %>% 
+  summarise(income = mean(income))
+```
+
 - mutate
+```{r}
+df <- df %>% mutate(years_out_of_education = age - education.num)
+```
+
 - summarise
+```{r}
+head(df %>% summarise(years_out_of_education),n = 10)
+```
+
 - arrange
+```{r}
+df %>% head(df, n = 10) %>% arrange(-hours.per.week)
+```
+
 - count
+```{r}
+df %>%  count(sex == "Male")
+```
+
 - count + arrange
+```{r}
+df %>% 
+  count(age)%>% 
+  arrange(-n)
+```
+
 - filter + count + arrange
+```{r}
+df %>%  filter(age < 50) %>% 
+  count(age)%>% 
+  arrange(-n)
+```
+
 - group_by + summarise
+```{r}
+df %>% 
+  group_by(race) %>% 
+  summarise(mean_final_wage = mean(fnlwgt))
+```
+
 - filter + group_by + summarise
+```{r}
+df %>% 
+  filter(race =='White') %>% 
+  group_by(sex) %>% 
+  summarise(mean_fnlwage = mean(fnlwgt))
+```
+
 - filter + group_by + summarise + arrange
+```{r}
+df %>% 
+  filter(race =='White') %>% 
+  group_by(sex) %>% 
+  summarise(mean_fnlwage = mean(fnlwgt)) %>% arrange(-mean_fnlwage)
+```
+
