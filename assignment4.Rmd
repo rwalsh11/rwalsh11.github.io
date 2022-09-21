@@ -268,7 +268,7 @@ head(df %>% select(age),n = 10)
 df %>% 
   filter(education.num == 10) %>% 
   group_by(age) %>% 
-  summarise(income = mean(income))
+  summarise(income = mean(fnlwgt)) %>% head(n=10)
 ```
 
 - mutate
