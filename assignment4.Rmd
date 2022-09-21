@@ -283,7 +283,7 @@ head(df %>% summarise(years_out_of_education),n = 10)
 
 - arrange
 ```{r}
-df %>% head(df, n = 10) %>% arrange(-hours.per.week)
+df  %>% arrange(-hours.per.week) %>% head(df, n = 10)
 ```
 
 - count
@@ -295,14 +295,14 @@ df %>%  count(sex == "Male")
 ```{r}
 df %>% 
   count(age)%>% 
-  arrange(-n)
+  arrange(-n) %>%head(n=10) 
 ```
 
 - filter + count + arrange
 ```{r}
 df %>%  filter(age < 50) %>% 
   count(age)%>% 
-  arrange(-n)
+  arrange(-n) %>% head(n=10)
 ```
 
 - group_by + summarise

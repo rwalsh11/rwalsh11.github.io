@@ -738,40 +738,40 @@ Income</a> or <a href="../data/titanic.csv">Titanic data</a>.</h4>
 <ul>
 <li>arrange</li>
 </ul>
-<pre class="r"><code>df %&gt;% head(df, n = 10) %&gt;% arrange(-hours.per.week)</code></pre>
-<pre><code>##    age   workclass fnlwgt    education education.num marital.status
-## 1   41     Private  70037 Some-college            10  Never-married
-## 2   34     Private 216864      HS-grad             9       Divorced
-## 3   90           ?  77053      HS-grad             9        Widowed
-## 4   66           ? 186061 Some-college            10        Widowed
-## 5   54     Private 140359      7th-8th             4       Divorced
-## 6   41     Private 264663 Some-college            10      Separated
-## 7   38     Private 150601         10th             6      Separated
-## 8   68 Federal-gov 422013      HS-grad             9       Divorced
-## 9   74   State-gov  88638    Doctorate            16  Never-married
-## 10  82     Private 132870      HS-grad             9        Widowed
-##           occupation   relationship  race    sex capital.gain capital.loss
-## 1       Craft-repair      Unmarried White   Male            0         3004
-## 2      Other-service      Unmarried White Female            0         3770
-## 3                  ?  Not-in-family White Female            0         4356
-## 4                  ?      Unmarried Black Female            0         4356
-## 5  Machine-op-inspct      Unmarried White Female            0         3900
-## 6     Prof-specialty      Own-child White Female            0         3900
-## 7       Adm-clerical      Unmarried White   Male            0         3770
-## 8     Prof-specialty  Not-in-family White Female            0         3683
-## 9     Prof-specialty Other-relative White Female            0         3683
-## 10   Exec-managerial  Not-in-family White Female            0         4356
+<pre class="r"><code>df  %&gt;% arrange(-hours.per.week) %&gt;% head(df, n = 10)</code></pre>
+<pre><code>##    age        workclass fnlwgt    education education.num     marital.status
+## 1   39          Private 348521 Some-college            10 Married-civ-spouse
+## 2   39          Private 237713  Prof-school            15 Married-civ-spouse
+## 3   38          Private 111499      HS-grad             9 Married-civ-spouse
+## 4   31          Private 147284    Doctorate            16 Married-civ-spouse
+## 5   43          Private 266324      HS-grad             9 Married-civ-spouse
+## 6   39          Private  70995    Bachelors            13 Married-civ-spouse
+## 7   45          Private 390368 Some-college            10 Married-civ-spouse
+## 8   40          Private  25005    Bachelors            13 Married-civ-spouse
+## 9   73 Self-emp-not-inc 102510      7th-8th             4 Married-civ-spouse
+## 10  49          Private 173115         10th             6          Separated
+##          occupation  relationship  race  sex capital.gain capital.loss
+## 1   Farming-fishing       Husband White Male            0         2415
+## 2             Sales       Husband White Male            0         2415
+## 3             Sales       Husband White Male            0         1977
+## 4    Prof-specialty       Husband White Male            0         1977
+## 5      Craft-repair       Husband White Male            0         1902
+## 6  Transport-moving       Husband White Male        15024            0
+## 7             Sales       Husband Black Male        15024            0
+## 8    Prof-specialty       Husband White Male        15024            0
+## 9   Farming-fishing       Husband White Male         6418            0
+## 10  Exec-managerial Not-in-family Black Male         4416            0
 ##    hours.per.week native.country income years_out_of_education
-## 1              60              ?   &gt;50K                     31
-## 2              45  United-States  &lt;=50K                     25
-## 3              40  United-States  &lt;=50K                     81
-## 4              40  United-States  &lt;=50K                     56
-## 5              40  United-States  &lt;=50K                     50
-## 6              40  United-States  &lt;=50K                     31
-## 7              40  United-States  &lt;=50K                     32
-## 8              40  United-States  &lt;=50K                     59
-## 9              20  United-States   &gt;50K                     58
-## 10             18  United-States  &lt;=50K                     73</code></pre>
+## 1              99  United-States   &gt;50K                     29
+## 2              99  United-States   &gt;50K                     24
+## 3              99  United-States   &gt;50K                     29
+## 4              99  United-States   &gt;50K                     15
+## 5              99  United-States   &gt;50K                     34
+## 6              99  United-States   &gt;50K                     26
+## 7              99  United-States   &gt;50K                     35
+## 8              99  United-States   &gt;50K                     27
+## 9              99  United-States   &gt;50K                     69
+## 10             99  United-States  &lt;=50K                     43</code></pre>
 <ul>
 <li>count</li>
 </ul>
@@ -784,7 +784,7 @@ Income</a> or <a href="../data/titanic.csv">Titanic data</a>.</h4>
 </ul>
 <pre class="r"><code>df %&gt;% 
   count(age)%&gt;% 
-  arrange(-n)</code></pre>
+  arrange(-n) %&gt;%head(n=10) </code></pre>
 <pre><code>##    age   n
 ## 1   36 898
 ## 2   31 888
@@ -795,76 +795,13 @@ Income</a> or <a href="../data/titanic.csv">Titanic data</a>.</h4>
 ## 7   28 867
 ## 8   30 861
 ## 9   37 858
-## 10  25 841
-## 11  27 835
-## 12  32 828
-## 13  38 827
-## 14  39 816
-## 15  29 813
-## 16  41 808
-## 17  24 798
-## 18  40 794
-## 19  26 785
-## 20  42 780
-## 21  43 770
-## 22  22 765
-## 23  20 753
-## 24  46 737
-## 25  45 734
-## 26  44 724
-## 27  21 720
-## 28  19 712
-## 29  47 708
-## 30  50 602
-## 31  51 595
-## 32  49 577
-## 33  18 550
-## 34  48 543
-## 35  52 478
-## 36  53 464
-## 37  55 419
-## 38  54 415
-## 39  17 395
-## 40  56 366
-## 41  58 366
-## 42  57 358
-## 43  59 355
-## 44  60 312
-## 45  61 300
-## 46  62 258
-## 47  63 230
-## 48  64 208
-## 49  65 178
-## 50  67 151
-## 51  66 150
-## 52  68 120
-## 53  69 108
-## 54  70  89
-## 55  71  72
-## 56  72  67
-## 57  73  64
-## 58  74  51
-## 59  76  46
-## 60  75  45
-## 61  90  43
-## 62  77  29
-## 63  78  23
-## 64  79  22
-## 65  80  22
-## 66  81  20
-## 67  82  12
-## 68  84  10
-## 69  83   6
-## 70  85   3
-## 71  88   3
-## 72  86   1
-## 73  87   1</code></pre>
+## 10  25 841</code></pre>
 <ul>
 <li>filter + count + arrange</li>
 </ul>
 <pre class="r"><code>df %&gt;%  filter(age &lt; 50) %&gt;% 
   count(age)%&gt;% 
-  arrange(-n)</code></pre>
+  arrange(-n) %&gt;% head(n=10)</code></pre>
 <pre><code>##    age   n
 ## 1   36 898
 ## 2   31 888
@@ -875,30 +812,7 @@ Income</a> or <a href="../data/titanic.csv">Titanic data</a>.</h4>
 ## 7   28 867
 ## 8   30 861
 ## 9   37 858
-## 10  25 841
-## 11  27 835
-## 12  32 828
-## 13  38 827
-## 14  39 816
-## 15  29 813
-## 16  41 808
-## 17  24 798
-## 18  40 794
-## 19  26 785
-## 20  42 780
-## 21  43 770
-## 22  22 765
-## 23  20 753
-## 24  46 737
-## 25  45 734
-## 26  44 724
-## 27  21 720
-## 28  19 712
-## 29  47 708
-## 30  49 577
-## 31  18 550
-## 32  48 543
-## 33  17 395</code></pre>
+## 10  25 841</code></pre>
 <ul>
 <li>group_by + summarise</li>
 </ul>
