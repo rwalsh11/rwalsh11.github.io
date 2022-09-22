@@ -1,8 +1,11 @@
-##Math 461: Statistical Analysis with R
+Math 461: Statistical Analysis with R
 
-#Ryan Walsh
+created by: Ryan Walsh
 
-#Assignments
+
+
+
+
 -[Click for Assignment 1](Assignment-1.html)
 
 -[Click for Assignment 2](assignment2.html)
