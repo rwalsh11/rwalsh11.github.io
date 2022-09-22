@@ -111,8 +111,8 @@ sum(table(unique.default(covid$State)))
 
 9. Create a new variable `weekdays` to store the weekday for each rows. 
 ```{r}
-covid$weekdays <- weekdays.Date(covid$Date_Report)
 
+covid$weekdays <- weekdays.Date(covid$Date_Report)
 ```
 
 10. Create the categorical variable `death2` variable taking the values as follows
