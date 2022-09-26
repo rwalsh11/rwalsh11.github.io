@@ -11,7 +11,7 @@
 
 
 
-<title>README</title>
+<title>Assignment 4 - Extra Credits</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -361,24 +361,154 @@ pre code {
 
 
 
+<h1 class="title toc-ignore">Assignment 4 - Extra Credits</h1>
 
 </div>
 
 
-<div id="math-461-statistical-analysis-with-r" class="section level1">
-<h1>Math 461: Statistical Analysis with R</h1>
-</div>
-<div id="created-by-ryan-walsh" class="section level1">
-<h1>Created by: Ryan Walsh</h1>
-<p>-<a href="Assignment-1.html">Click for Assignment 1</a></p>
-<p>-<a href="assignment2.html">Click for Assignment 2</a></p>
-<p>-<a href="assignment3.html">Click for Assignment 3</a></p>
-<p>-<a href="assignment3ExtraCredit.html">click for assignment 3 extra
-credit</a></p>
-<p>-<a href="assignment4.html">click for assignment 4</a></p>
-<p>-<a href="assignment4_extra_credits.html">click for assignment 4
-extra credit</a></p>
-</div>
+<p><strong><em>How to do it?</em></strong>:</p>
+<ul>
+<li><p>Open the Rmarkdown file of this assignment (<a href="assignment4_extra_credits.Rmd">link</a>) in Rstudio.</p></li>
+<li><p>Right under each <strong>question</strong>, insert a code chunk
+(you can use the hotkey <code>Ctrl + Alt + I</code> to add a code chunk)
+and code the solution for the question.</p></li>
+<li><p>Notice that if there is <code>eval=FALSE</code> in the first line
+of the code chunk, the chunk will not be execute.</p></li>
+<li><p><code>Knit</code> the rmarkdown file (hotkey:
+<code>Ctrl + Alt + K</code>) to export an html.</p></li>
+<li><p>Publish the html file to your Githiub Page.</p></li>
+</ul>
+<p><strong><em>Submission</em></strong>: Submit the link on Github of
+the assignment to Canvas.</p>
+<hr />
+<p>This assignment works with the <a href="../data/imdb_top_1000.csv">IMDB Top 1000 data</a>. Find out more
+information about this data at <a href="https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows">this
+link</a>. Import the data and answer the following questions.</p>
+<ol style="list-style-type: decimal">
+<li>List all the names of the columns of the data</li>
+</ol>
+<pre class="r"><code>library(tidyverse)
+df &lt;- read_csv(&quot;imdb_top_1000.csv&quot;)
+colnames(df)</code></pre>
+<pre><code>##  [1] &quot;Poster_Link&quot;   &quot;Series_Title&quot;  &quot;Released_Year&quot; &quot;Certificate&quot;  
+##  [5] &quot;Runtime&quot;       &quot;Genre&quot;         &quot;IMDB_Rating&quot;   &quot;Overview&quot;     
+##  [9] &quot;Meta_score&quot;    &quot;Director&quot;      &quot;Star1&quot;         &quot;Star2&quot;        
+## [13] &quot;Star3&quot;         &quot;Star4&quot;         &quot;No_of_Votes&quot;   &quot;Gross&quot;</code></pre>
+<pre class="r"><code>ncol(df)</code></pre>
+<pre><code>## [1] 16</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Which movies have the highest money earned (Gross)?</li>
+</ol>
+<pre class="r"><code>library(tidyverse)
+df %&gt;% arrange(-Gross) %&gt;% select(Gross)</code></pre>
+<pre><code>## # A tibble: 1,000 × 1
+##        Gross
+##        &lt;dbl&gt;
+##  1 936662225
+##  2 858373000
+##  3 760507625
+##  4 678815482
+##  5 659325379
+##  6 623279547
+##  7 608581744
+##  8 534858444
+##  9 532177324
+## 10 448139099
+## # … with 990 more rows</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>What is the lowest rating (IMDB_Rating)? List five movies have this
+lowest rating.</li>
+</ol>
+<pre class="r"><code>head(df %&gt;% select(IMDB_Rating, Series_Title) %&gt;% arrange(min_rank(IMDB_Rating)),n = 5)</code></pre>
+<pre><code>## # A tibble: 5 × 2
+##   IMDB_Rating Series_Title                    
+##         &lt;dbl&gt; &lt;chr&gt;                           
+## 1         7.6 Dark Waters                     
+## 2         7.6 Searching                       
+## 3         7.6 Once Upon a Time... in Hollywood
+## 4         7.6 Nelyubov                        
+## 5         7.6 The Florida Project</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>Which year have the most number of movies released in the list? What
+is the total of money earned on that year?</li>
+</ol>
+<pre class="r"><code>head(df %&gt;% select(Released_Year,Gross) %&gt;% arrange(min_rank(Released_Year),Gross),n = 10)</code></pre>
+<pre><code>## # A tibble: 10 × 2
+##    Released_Year   Gross
+##    &lt;chr&gt;           &lt;dbl&gt;
+##  1 1920               NA
+##  2 1921          5450000
+##  3 1922               NA
+##  4 1924           977375
+##  5 1925            50970
+##  6 1925          5450000
+##  7 1926          1033895
+##  8 1927           539540
+##  9 1927          1236166
+## 10 1928            21877</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>What is the total money earned per movies on average?</li>
+</ol>
+<pre class="r"><code>df %&gt;% summarise(mean(Gross, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   `mean(Gross, na.rm = TRUE)`
+##                         &lt;dbl&gt;
+## 1                   68034751.</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>Calculate the average number of votes by year. Calculate the average
+number of votes of movies that have IMDB rating greater than 9.</li>
+</ol>
+<pre class="r"><code>df %&gt;% group_by(Released_Year) %&gt;% filter(IMDB_Rating &gt; 9) %&gt;% summarise(mean(No_of_Votes),Series_Title)</code></pre>
+<pre><code>## # A tibble: 2 × 3
+##   Released_Year `mean(No_of_Votes)` Series_Title            
+##   &lt;chr&gt;                       &lt;dbl&gt; &lt;chr&gt;                   
+## 1 1972                      1620367 The Godfather           
+## 2 1994                      2343110 The Shawshank Redemption</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Calculate the average Meta score in 2020 of movies that have number
+of votes in the third quartile.</li>
+</ol>
+<pre class="r"><code>df %&gt;%  filter(Released_Year == 2020) %&gt;% summarise(mean(No_of_Votes))</code></pre>
+<pre><code>## # A tibble: 1 × 1
+##   `mean(No_of_Votes)`
+##                 &lt;dbl&gt;
+## 1               84127</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li><p>(Optional - Challenging). The current <code>Runtime</code>
+variable is not a numeric. Use the <code>str_remove</code> function to
+remove <code>min</code> from the variables then use
+<code>as.numeric</code> to convert the variable to numeric. Calculate
+the average running time in the 2010s. Calculate the correlation between
+running time and rating (adding <code>use=&quot;complete.obs&quot;</code> in the
+<code>cor</code> function to ignore the missing values).</p></li>
+<li><p>We can use <code>select_if</code> to select columns satisfying a
+condition and use <code>summarise_if</code> to do calculation on columns
+satisfying a condition. Try the follows to understand these
+functions.</p></li>
+</ol>
+<pre class="r"><code># Select only character columns
+df %&gt;% select_if(is.character)
+
+# Calculate the median of all numeric columns
+df %&gt;% summarise_if(is.numeric, mean, na.rm=TRUE)</code></pre>
+<ol start="10" style="list-style-type: decimal">
+<li>Implement the follows functions or combos. Drawing a comment or
+summary from each calculation. The codes in this question should be
+different from the codes used in other questions.</li>
+</ol>
+<ul>
+<li>select</li>
+<li>filter</li>
+<li>mutate</li>
+<li>summarise</li>
+<li>arrange</li>
+<li>count</li>
+<li>count + arrange</li>
+<li>filter + count + arrange</li>
+<li>group_by + summarise</li>
+<li>filter + group_by + summarise</li>
+<li>filter + group_by + summarise + arrange</li>
+</ul>
 
 
 

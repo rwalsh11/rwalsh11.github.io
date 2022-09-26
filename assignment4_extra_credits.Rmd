@@ -1,0 +1,105 @@
+
+---
+output: # rmarkdown::github_document
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 4 - Extra Credits"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](assignment4_extra_credits.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- Notice that if there is `eval=FALSE` in the first line of the code chunk, the chunk will not be execute.
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+-------
+
+This assignment works with the [IMDB Top 1000 data](../data/imdb_top_1000.csv).  Find out more information about this data at [this link](https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows).  Import the data and answer the following questions. 
+
+1. List all the names of the columns of the data
+```{r}
+library(tidyverse)
+df <- read_csv("imdb_top_1000.csv")
+colnames(df)
+ncol(df)
+```
+
+2. Which movies have the highest money earned (Gross)?
+```{r}
+library(tidyverse)
+df %>% arrange(-Gross) %>% select(Gross)
+```
+
+
+3. What is the lowest rating (IMDB_Rating)?  List five movies have this lowest rating.
+```{r}
+head(df %>% select(IMDB_Rating, Series_Title) %>% arrange(min_rank(IMDB_Rating)),n = 5)
+```
+
+
+4. Which year have the most number of movies released in the list?  What is the total of money earned on that year?
+```{r}
+head(df %>% select(Released_Year,Gross) %>% arrange(min_rank(Released_Year),Gross),n = 10)
+
+```
+
+
+5. What is the total money earned per movies on average?
+```{r}
+df %>% summarise(mean(Gross, na.rm = TRUE))
+```
+
+
+6. Calculate the average number of votes by year. Calculate the average number of votes of movies that have IMDB rating greater than 9.
+```{r}
+df %>% group_by(Released_Year) %>% filter(IMDB_Rating > 9) %>% summarise(mean(No_of_Votes),Series_Title)
+```
+
+
+7. Calculate the average Meta score in 2020 of movies that have number of votes in the third quartile. 
+
+```{r}
+
+df %>%  filter(Released_Year == 2020) %>% summarise(mean(No_of_Votes))
+
+```
+
+8. (Optional - Challenging). The current `Runtime` variable is not a numeric. Use the `str_remove` function to remove ` min` from the variables then use `as.numeric` to convert the variable to numeric. Calculate the average running time in the 2010s. Calculate the correlation between running time and rating (adding `use="complete.obs"` in the `cor` function to ignore the missing values).  
+
+9. We can use `select_if` to select columns satisfying a condition and use `summarise_if` to do calculation on columns satisfying a condition.  Try the follows to understand these functions. 
+
+```{r,eval=FALSE}
+# Select only character columns
+df %>% select_if(is.character)
+
+# Calculate the median of all numeric columns
+df %>% summarise_if(is.numeric, mean, na.rm=TRUE)
+```
+
+
+10. Implement the follows functions or combos. Drawing a comment or summary from each calculation. The codes in this question should be different from the codes used in other questions.
+
+- select
+- filter
+- mutate
+- summarise
+- arrange
+- count
+- count + arrange
+- filter + count + arrange
+- group_by + summarise
+- filter + group_by + summarise
+- filter + group_by + summarise + arrange

@@ -39,9 +39,6 @@ colSums(is.na(df))
 ```
 
 
-```{r}
-
-```
 
 #class
 ```{r}

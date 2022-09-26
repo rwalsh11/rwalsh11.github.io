@@ -121,7 +121,6 @@ Pipe operator offers another way to write R codes. Many times, it makes the code
 
 ```{r, eval=FALSE}
 x <- c(1:10)
-
 # square root of x
 sqrt(x)
 x %>% sqrt
@@ -131,7 +130,7 @@ log(sum(sqrt(x)))
 x %>% sqrt %>% sum %>% log
 # log base 2 of 16
 log(16, 2)
-16 %>% log2
+16 %>% log2 
 ```
 
 -------

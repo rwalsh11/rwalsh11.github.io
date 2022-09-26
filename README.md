@@ -1,6 +1,6 @@
-Math 461: Statistical Analysis with R
+# Math 461: Statistical Analysis with R
 
-created by: Ryan Walsh
+# Created by: Ryan Walsh
 
 
 
@@ -15,3 +15,5 @@ created by: Ryan Walsh
 -[click for assignment 3 extra credit](assignment3ExtraCredit.html)
 
 -[click for assignment 4](assignment4.html)
+
+-[click for assignment 4 extra credit](assignment4_extra_credits.html)
