@@ -1,6 +1,6 @@
 # Math 461: Statistical Analysis with R
 
-# Created by: Ryan Walsh
+Created by: Ryan Walsh
 
 
 
