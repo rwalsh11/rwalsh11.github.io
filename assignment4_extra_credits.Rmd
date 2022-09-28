@@ -81,7 +81,8 @@ df %>%  filter(Released_Year == 2020) %>% summarise(mean(No_of_Votes))
 
 9. We can use `select_if` to select columns satisfying a condition and use `summarise_if` to do calculation on columns satisfying a condition.  Try the follows to understand these functions. 
 
-```{r,eval=FALSE}
+```{r}
+library(tidyverse)
 # Select only character columns
 df %>% select_if(is.character)
 
@@ -93,13 +94,51 @@ df %>% summarise_if(is.numeric, mean, na.rm=TRUE)
 10. Implement the follows functions or combos. Drawing a comment or summary from each calculation. The codes in this question should be different from the codes used in other questions.
 
 - select
+```{r}
+df %>% select(Runtime) %>% head(n=10)
+```
+
 - filter
+```{r}
+df %>% select(Released_Year) %>% filter(Released_Year > 1990) %>% head(n=10)
+```
+
 - mutate
+```{r}
+df %>% mutate(Meta_score = Meta_score / 100)
+# %change meta score
+```
+
 - summarise
+```{r}
+df %>% summarise(Meta_score) %>% head(n=10)
+```
+
 - arrange
+```{r}
+df %>%  arrange(-Meta_score) %>% summarise(Star1) %>% head(n = 10)
+```
+
 - count
 - count + arrange
 - filter + count + arrange
+```{r}
+df  %>% filter(Released_Year == 1970) %>% arrange(-Gross) %>% summarise(Series_Title)
+```
+
 - group_by + summarise
+```{r}
+df %>% group_by(Genre) %>% summarise(Series_Title) %>% head(n = 10)
+```
+
 - filter + group_by + summarise
+```{r}
+df %>% filter(IMDB_Rating > 7) %>% group_by(Genre) %>% summarise(Series_Title) %>% head(n = 10)
+```
+
 - filter + group_by + summarise + arrange
+```{r}
+df %>% filter(IMDB_Rating > 7) %>% arrange(-No_of_Votes) %>% group_by(Genre) %>% summarise(Series_Title)  %>% head(n = 10)
+
+```
+

@@ -486,11 +486,31 @@ condition and use <code>summarise_if</code> to do calculation on columns
 satisfying a condition. Try the follows to understand these
 functions.</p></li>
 </ol>
-<pre class="r"><code># Select only character columns
-df %&gt;% select_if(is.character)
-
-# Calculate the median of all numeric columns
+<pre class="r"><code>library(tidyverse)
+# Select only character columns
+df %&gt;% select_if(is.character)</code></pre>
+<pre><code>## # A tibble: 1,000 × 12
+##    Poster_Link Serie…¹ Relea…² Certi…³ Runtime Genre Overv…⁴ Direc…⁵ Star1 Star2
+##    &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;
+##  1 https://m.… The Sh… 1994    A       142 min Drama Two im… Frank … Tim … Morg…
+##  2 https://m.… The Go… 1972    A       175 min Crim… An org… Franci… Marl… Al P…
+##  3 https://m.… The Da… 2008    UA      152 min Acti… When t… Christ… Chri… Heat…
+##  4 https://m.… The Go… 1974    A       202 min Crim… The ea… Franci… Al P… Robe…
+##  5 https://m.… 12 Ang… 1957    U       96 min  Crim… A jury… Sidney… Henr… Lee …
+##  6 https://m.… The Lo… 2003    U       201 min Acti… Gandal… Peter … Elij… Vigg…
+##  7 https://m.… Pulp F… 1994    A       154 min Crim… The li… Quenti… John… Uma …
+##  8 https://m.… Schind… 1993    A       195 min Biog… In Ger… Steven… Liam… Ralp…
+##  9 https://m.… Incept… 2010    UA      148 min Acti… A thie… Christ… Leon… Jose…
+## 10 https://m.… Fight … 1999    A       139 min Drama An ins… David … Brad… Edwa…
+## # … with 990 more rows, 2 more variables: Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, and
+## #   abbreviated variable names ¹​Series_Title, ²​Released_Year, ³​Certificate,
+## #   ⁴​Overview, ⁵​Director</code></pre>
+<pre class="r"><code># Calculate the median of all numeric columns
 df %&gt;% summarise_if(is.numeric, mean, na.rm=TRUE)</code></pre>
+<pre><code>## # A tibble: 1 × 4
+##   IMDB_Rating Meta_score No_of_Votes     Gross
+##         &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+## 1        7.95       78.0     273693. 68034751.</code></pre>
 <ol start="10" style="list-style-type: decimal">
 <li>Implement the follows functions or combos. Drawing a comment or
 summary from each calculation. The codes in this question should be
@@ -498,17 +518,160 @@ different from the codes used in other questions.</li>
 </ol>
 <ul>
 <li>select</li>
+</ul>
+<pre class="r"><code>df %&gt;% select(Runtime) %&gt;% head(n=10)</code></pre>
+<pre><code>## # A tibble: 10 × 1
+##    Runtime
+##    &lt;chr&gt;  
+##  1 142 min
+##  2 175 min
+##  3 152 min
+##  4 202 min
+##  5 96 min 
+##  6 201 min
+##  7 154 min
+##  8 195 min
+##  9 148 min
+## 10 139 min</code></pre>
+<ul>
 <li>filter</li>
+</ul>
+<pre class="r"><code>df %&gt;% select(Released_Year) %&gt;% filter(Released_Year &gt; 1990) %&gt;% head(n=10)</code></pre>
+<pre><code>## # A tibble: 10 × 1
+##    Released_Year
+##    &lt;chr&gt;        
+##  1 1994         
+##  2 2008         
+##  3 2003         
+##  4 1994         
+##  5 1993         
+##  6 2010         
+##  7 1999         
+##  8 2001         
+##  9 1994         
+## 10 2002</code></pre>
+<ul>
 <li>mutate</li>
+</ul>
+<pre class="r"><code>df %&gt;% mutate(Meta_score = Meta_score / 100)</code></pre>
+<pre><code>## # A tibble: 1,000 × 16
+##    Poste…¹ Serie…² Relea…³ Certi…⁴ Runtime Genre IMDB_…⁵ Overv…⁶ Meta_…⁷ Direc…⁸
+##    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;  
+##  1 https:… The Sh… 1994    A       142 min Drama     9.3 Two im…    0.8  Frank …
+##  2 https:… The Go… 1972    A       175 min Crim…     9.2 An org…    1    Franci…
+##  3 https:… The Da… 2008    UA      152 min Acti…     9   When t…    0.84 Christ…
+##  4 https:… The Go… 1974    A       202 min Crim…     9   The ea…    0.9  Franci…
+##  5 https:… 12 Ang… 1957    U       96 min  Crim…     9   A jury…    0.96 Sidney…
+##  6 https:… The Lo… 2003    U       201 min Acti…     8.9 Gandal…    0.94 Peter …
+##  7 https:… Pulp F… 1994    A       154 min Crim…     8.9 The li…    0.94 Quenti…
+##  8 https:… Schind… 1993    A       195 min Biog…     8.9 In Ger…    0.94 Steven…
+##  9 https:… Incept… 2010    UA      148 min Acti…     8.8 A thie…    0.74 Christ…
+## 10 https:… Fight … 1999    A       139 min Drama     8.8 An ins…    0.66 David …
+## # … with 990 more rows, 6 more variables: Star1 &lt;chr&gt;, Star2 &lt;chr&gt;,
+## #   Star3 &lt;chr&gt;, Star4 &lt;chr&gt;, No_of_Votes &lt;dbl&gt;, Gross &lt;dbl&gt;, and abbreviated
+## #   variable names ¹​Poster_Link, ²​Series_Title, ³​Released_Year, ⁴​Certificate,
+## #   ⁵​IMDB_Rating, ⁶​Overview, ⁷​Meta_score, ⁸​Director</code></pre>
+<pre class="r"><code># %change meta score</code></pre>
+<ul>
 <li>summarise</li>
+</ul>
+<pre class="r"><code>df %&gt;% summarise(Meta_score) %&gt;% head(n=10)</code></pre>
+<pre><code>## # A tibble: 10 × 1
+##    Meta_score
+##         &lt;dbl&gt;
+##  1         80
+##  2        100
+##  3         84
+##  4         90
+##  5         96
+##  6         94
+##  7         94
+##  8         94
+##  9         74
+## 10         66</code></pre>
+<ul>
 <li>arrange</li>
+</ul>
+<pre class="r"><code>df %&gt;%  arrange(-Meta_score) %&gt;% summarise(Star1) %&gt;% head(n = 10)</code></pre>
+<pre><code>## # A tibble: 10 × 1
+##    Star1                 
+##    &lt;chr&gt;                 
+##  1 Marlon Brando         
+##  2 Humphrey Bogart       
+##  3 James Stewart         
+##  4 Peter O&#39;Toole         
+##  5 James Stewart         
+##  6 Orson Welles          
+##  7 Irène Jacob           
+##  8 Bertil Guve           
+##  9 Jean-Louis Trintignant
+## 10 Burt Lancaster</code></pre>
+<ul>
 <li>count</li>
 <li>count + arrange</li>
 <li>filter + count + arrange</li>
+</ul>
+<pre class="r"><code>df  %&gt;% filter(Released_Year == 1970) %&gt;% arrange(-Gross) %&gt;% summarise(Series_Title)</code></pre>
+<pre><code>## # A tibble: 3 × 1
+##   Series_Title  
+##   &lt;chr&gt;         
+## 1 Patton        
+## 2 Kelly&#39;s Heroes
+## 3 Il conformista</code></pre>
+<ul>
 <li>group_by + summarise</li>
+</ul>
+<pre class="r"><code>df %&gt;% group_by(Genre) %&gt;% summarise(Series_Title) %&gt;% head(n = 10)</code></pre>
+<pre><code>## # A tibble: 10 × 2
+## # Groups:   Genre [3]
+##    Genre                        Series_Title                      
+##    &lt;chr&gt;                        &lt;chr&gt;                             
+##  1 Action, Adventure            The Dark Knight Rises             
+##  2 Action, Adventure            Raiders of the Lost Ark           
+##  3 Action, Adventure            Batman Begins                     
+##  4 Action, Adventure            Indiana Jones and the Last Crusade
+##  5 Action, Adventure            First Blood                       
+##  6 Action, Adventure, Biography Aguirre, der Zorn Gottes          
+##  7 Action, Adventure, Comedy    Sholay                            
+##  8 Action, Adventure, Comedy    The General                       
+##  9 Action, Adventure, Comedy    Bajrangi Bhaijaan                 
+## 10 Action, Adventure, Comedy    Guardians of the Galaxy</code></pre>
+<ul>
 <li>filter + group_by + summarise</li>
+</ul>
+<pre class="r"><code>df %&gt;% filter(IMDB_Rating &gt; 7) %&gt;% group_by(Genre) %&gt;% summarise(Series_Title) %&gt;% head(n = 10)</code></pre>
+<pre><code>## # A tibble: 10 × 2
+## # Groups:   Genre [3]
+##    Genre                        Series_Title                      
+##    &lt;chr&gt;                        &lt;chr&gt;                             
+##  1 Action, Adventure            The Dark Knight Rises             
+##  2 Action, Adventure            Raiders of the Lost Ark           
+##  3 Action, Adventure            Batman Begins                     
+##  4 Action, Adventure            Indiana Jones and the Last Crusade
+##  5 Action, Adventure            First Blood                       
+##  6 Action, Adventure, Biography Aguirre, der Zorn Gottes          
+##  7 Action, Adventure, Comedy    Sholay                            
+##  8 Action, Adventure, Comedy    The General                       
+##  9 Action, Adventure, Comedy    Bajrangi Bhaijaan                 
+## 10 Action, Adventure, Comedy    Guardians of the Galaxy</code></pre>
+<ul>
 <li>filter + group_by + summarise + arrange</li>
 </ul>
+<pre class="r"><code>df %&gt;% filter(IMDB_Rating &gt; 7) %&gt;% arrange(-No_of_Votes) %&gt;% group_by(Genre) %&gt;% summarise(Series_Title)  %&gt;% head(n = 10)</code></pre>
+<pre><code>## # A tibble: 10 × 2
+## # Groups:   Genre [3]
+##    Genre                        Series_Title                      
+##    &lt;chr&gt;                        &lt;chr&gt;                             
+##  1 Action, Adventure            The Dark Knight Rises             
+##  2 Action, Adventure            Batman Begins                     
+##  3 Action, Adventure            Raiders of the Lost Ark           
+##  4 Action, Adventure            Indiana Jones and the Last Crusade
+##  5 Action, Adventure            First Blood                       
+##  6 Action, Adventure, Biography Aguirre, der Zorn Gottes          
+##  7 Action, Adventure, Comedy    Guardians of the Galaxy           
+##  8 Action, Adventure, Comedy    Deadpool                          
+##  9 Action, Adventure, Comedy    Kingsman: The Secret Service      
+## 10 Action, Adventure, Comedy    Thor: Ragnarok</code></pre>
 
 
 
