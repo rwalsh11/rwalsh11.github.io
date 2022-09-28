@@ -37,6 +37,7 @@ This assignment works with the Adult Census Data that can be downloaded at [this
 
 1. Use `read_csv` to import the data.  Show the number of NAs for each columns.   
 ```{r}
+library(tidyverse)
 df <- read_csv("adult_census_missing.csv")
  colSums(is.na(df))
 ```
