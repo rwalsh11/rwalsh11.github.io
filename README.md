@@ -3,9 +3,6 @@
 Created by: Ryan Walsh
 
 
-
-
-
 -[Click for Assignment 1](Assignment-1.html)
 
 -[Click for Assignment 2](assignment2.html)
@@ -19,3 +16,7 @@ Created by: Ryan Walsh
 -[click for assignment 4 extra credit](assignment4_extra_credits.html)
 
 -[click for assignment 5](assignment5.html)
+
+-[click for assignment 5 extra credit](assignment5_extra_credit.html)
+
+-[click for assignment 6](assignment6.html)

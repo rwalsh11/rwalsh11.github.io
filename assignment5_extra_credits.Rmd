@@ -1,0 +1,53 @@
+
+---
+output: # rmarkdown::github_document
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 5 - Extra Credits"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](assignment5_extra_credits.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas under Assignment 5 - Extra Credits. 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+-------
+
+1. Download the c2015 dataset to your computer at [this link](../data/c2015.xlsx). Load the library `readxl` (library(readxl)) then use the function `read_excel()` to read the c2015 dataset.  The data is from Fatality Analysis Reporting System (FARS). The data includes vital accidents information, such as when, where, and how the accident happened. FARS also includes the drivers and passengers' information, such as age,gender etc.  Some of the fatal accident had multiple vehicles involved.  More information about FARS can be found at: https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars
+
+2. Let's study the variable `SEX`. How many missing values in the NAs form? 
+
+3. Still with variable `SEX`. There are missing values in this variables that are not `NAs`. Identify the forms of missing values in this variable. Use the `na_if` function to change all the forms of missing values to `NAs`. 
+
+4. Still with variable `SEX`. After all the missing values are in the `NAs` form.  Change the missing values of this variable to the majority sex. 
+
+5. Let's study variable `AGE`. Use the `table` function to check out the values of these variable and forms of missing values. Use `na_if` to change all the forms of missing values to `NAs`. 
+
+6. Still with variable `AGE`.  Use the `str_replace` to replace `Less than 1` to '0' (character 0, not number 0).
+
+7. Still with variable `AGE`. Use the `class` function to check the type of this variable.  Use the `as.numeric` function to change the type of the variable to numeric.
+
+8. Still with variable `AGE`. Replace the missing values `NAs` by the mean of the variable. 
+`
+9. Let's fix the variable `TRAV_SP`. Do the follows.
+
+- Use the `table` function to check all the values of this variable.  Use the `str_remove` to remove the `MPH` in each value.
+- Remove the row with the travel speed `Greater`
+- Use the `str_replace` function to replace `Stopped` by '0' (dont forget the quotation mark around 0)
+- Use `na_if` to change all the forms of missing values to `NAs`
+- Check the type of this variable using `class`. Use `as.numeric` to change the type to numeric.
+- Use `replace_na` to replace the `NAs` to the median of the variable. 
+
+10. Find the correlation between Age of the drivers and Travel speed (`TRAV_SP`). Hint:  You want to look at the seat positions (`SEAT_POS` variable) to filter out the observations about the drivers, then calculate the correlation. 
