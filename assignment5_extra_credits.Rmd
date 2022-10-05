@@ -26,14 +26,44 @@ knitr::opts_chunk$set(message = FALSE)
 -------
 
 1. Download the c2015 dataset to your computer at [this link](../data/c2015.xlsx). Load the library `readxl` (library(readxl)) then use the function `read_excel()` to read the c2015 dataset.  The data is from Fatality Analysis Reporting System (FARS). The data includes vital accidents information, such as when, where, and how the accident happened. FARS also includes the drivers and passengers' information, such as age,gender etc.  Some of the fatal accident had multiple vehicles involved.  More information about FARS can be found at: https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars
+```{r}
+library(readxl)
+df <- read_excel("c2015.xlsx")
+```
 
 2. Let's study the variable `SEX`. How many missing values in the NAs form? 
+```{r}
+table(is.na(df$SEX))
+table(df$SEX)
+
+```
+
 
 3. Still with variable `SEX`. There are missing values in this variables that are not `NAs`. Identify the forms of missing values in this variable. Use the `na_if` function to change all the forms of missing values to `NAs`. 
+```{r}
+library(tidyverse)
+library(VIM)
+df <- na_if(df, 'Unknown')
+df <- na_if(df, 'Not Rep')
+table(df$SEX)
+```
+
 
 4. Still with variable `SEX`. After all the missing values are in the `NAs` form.  Change the missing values of this variable to the majority sex. 
 
+```{r}
+majority_sex <- names(which.max(table(df$SEX)))
+df$SEX <- replace_na(df$SEX, majority_sex)
+table(df$SEX)
+```
+
+
 5. Let's study variable `AGE`. Use the `table` function to check out the values of these variable and forms of missing values. Use `na_if` to change all the forms of missing values to `NAs`. 
+
+```{r}
+table(is.na(df$AGE))
+```
+
 
 6. Still with variable `AGE`.  Use the `str_replace` to replace `Less than 1` to '0' (character 0, not number 0).
 
