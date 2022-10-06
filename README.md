@@ -1,4 +1,4 @@
-# Math 461: Statistical Analysis with R
+# Math 421: Statistical Analysis with R
 
 Created by: Ryan Walsh
 
@@ -20,3 +20,6 @@ Created by: Ryan Walsh
 -[click for assignment 5 extra credit](assignment5_extra_credit.html)
 
 -[click for assignment 6](assignment6.html)
+
+-[click for assignment 7](assignment7.html)
+[Link to the plot](avgWage.png)
