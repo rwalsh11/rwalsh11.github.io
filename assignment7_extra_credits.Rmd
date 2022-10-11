@@ -1,0 +1,45 @@
+
+---
+output: 
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 7 - Extra Credits: Practice dplyr and ggplot2"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](assignment7_extra_credits.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+
+-------
+
+1. Import the data at https://bryantstats.github.io/math421/data/ds_salaries.csv
+
+    The data description can be found at https://www.kaggle.com/datasets/saurabhshahane/data-science-jobs-salaries
+
+2. Is there any column that contains NAs?
+
+3. What is the most frequent job title in the data?  
+
+4. Find the average salary data of the three most frequent job titles in the data. 
+
+5. What is the job title that have the highest average salary?
+
+6. Which country gives the highest salary on average? 
+
+7. Plot five meaningful plots. All plots should have title, caption, and appropriate labels.

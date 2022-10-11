@@ -66,10 +66,24 @@ table(is.na(df$AGE))
 
 
 6. Still with variable `AGE`.  Use the `str_replace` to replace `Less than 1` to '0' (character 0, not number 0).
+```{r}
+df$AGE <- str_replace(df$AGE,"Less than 1", "0")
+
+```
 
 7. Still with variable `AGE`. Use the `class` function to check the type of this variable.  Use the `as.numeric` function to change the type of the variable to numeric.
+```{r}
+class(df$AGE)
+df$AGE <- as.numeric(df$AGE)
+
+```
 
 8. Still with variable `AGE`. Replace the missing values `NAs` by the mean of the variable. 
+
+```{r}
+
+```
+
 `
 9. Let's fix the variable `TRAV_SP`. Do the follows.
 
