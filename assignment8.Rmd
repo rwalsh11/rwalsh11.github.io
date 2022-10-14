@@ -25,12 +25,82 @@ knitr::opts_chunk$set(message = FALSE)
 
 
 -------
+```{r}
+library(tidyverse)
+library(gganimate)
+library(gifski)
+df <- read.csv("adult_census.csv")
+```
 
 1. Install two packages `gganimate` and `gifski` then restart Rstudio. Using the `Adult Census Income` data, make an animation using `geom_point` and `transition_states`.
+```{r}
+
+df %>% ggplot(aes(x = hours.per.week,
+           y = age, color=race))+
+  geom_point()+
+  transition_states(sex)+
+  labs(title = 'sex: {closest_state}')
+
+```
+
 
 2. Using the `Adult Census Income` data, make an animation using `geom_bar` and `transition_states`.
 
+```{r}
+df %>% ggplot(aes(x = hours.per.week,
+           y = age, color=marital.status))+
+  geom_point()+
+  transition_states(sex)+
+  labs(title = 'sex: {closest_state}')
+```
+
 3. Use the WHO's dataset at [this link](https://covid19.who.int/WHO-COVID-19-global-data.csv). Make a top-10 bar race by months between countries on the number of deaths by Covid 19 in 2021.
+```{r}
+library(gapminder)
+library(gganimate)
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+df <- read_csv("WHO-COVID-19-global-data.csv")
+
+```
+
+```{r}
+df$week <- week(df$Date_reported)
+d1 <- df %>% group_by(week, Country) %>% summarise(mean = mean(New_cases))
+d2 <- d1 %>% group_by(week) %>% mutate(rank=rank(-mean)) 
+d3 <- d2 %>% filter(rank <= 10)
+a1 <- d3 %>% ggplot(aes(x=rank, y=mean, group=Country, fill=Country, label=Country)) + geom_col()+geom_text(aes(y = mean, label = Country), hjust = 1.4)+ 
+    coord_flip(clip = "off", expand = FALSE) +scale_x_reverse()+
+    labs(title = 'Week {closest_state}', x='', y='Total Number of Positive Caeses', fill='Country')+
+    theme(plot.title = element_text(hjust = 1, size = 22),
+          axis.ticks.y = element_blank(),
+          axis.text.y  = element_blank()) + 
+    transition_states(week)+
+    ease_aes("cubic-in-out")
+animate(a1, nframes = 400)
+```
 
 4. Make a bar race using a dataset of your own interest. You may use the dataset that we use in class (https://covidtracking.com/data/download/all-states-history.csv) but you should make a different bar racev from ones in the slides. 
+```{r}
+df <- read.csv("all-states-history.csv")
+```
+
+```{r}
+df$week <- week(df$date)
+d1 <- df %>% group_by(week, state) %>% summarise(mean = mean(hospitalizedCurrently))
+d2 <- d1 %>% group_by(week) %>% mutate(rank=rank(-mean)) 
+d3 <- d2 %>% filter(rank <= 10)
+a1 <- d3 %>% ggplot(aes(x=rank, y=mean, group=state, fill=state, label=state)) + geom_col()+
+    geom_text(aes(y = mean, label = state), hjust = 1.4)+ 
+    coord_flip(clip = "off", expand = FALSE) +scale_x_reverse()+
+    labs(title = 'Week {closest_state}', x='', y='Total Number of Positive Caeses', fill='state')+
+    theme(plot.title = element_text(hjust = 1, size = 22),
+          axis.ticks.y = element_blank(),
+          axis.text.y  = element_blank()) + 
+    transition_states(week)+
+    ease_aes("cubic-in-out")
+animate(a1, nframes = 400)
+```
 
