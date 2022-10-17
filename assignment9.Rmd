@@ -20,7 +20,7 @@ title: "Assignment 9: Visualization - Revealing a graph"
 ***Submission***: Submit the link on Github of the assignment to Canvas
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
 
 
@@ -102,7 +102,8 @@ plot <- df %>% filter(location %in% c("Lower middle income", "Low income", "Uppe
             color=location))+ 
   geom_line()+
   geom_point(size=1)+
-  transition_reveal(date)
+  transition_reveal(date)+
+  labs(caption = 'R is infact a pretty cool software')
 plot
 ```
 
