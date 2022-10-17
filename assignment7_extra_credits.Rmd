@@ -33,8 +33,21 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
     The data description can be found at https://www.kaggle.com/datasets/saurabhshahane/data-science-jobs-salaries
 
 2. Is there any column that contains NAs?
+```{r}
+library(tidyverse )
+library(dplyr)
+df <- read.csv("Data_Science_Jobs_Salaries.csv")
+df %>% is.na() %>% colSums()
+```
+
 
 3. What is the most frequent job title in the data?  
+
+```{r}
+head(subset(df, select = occupation))
+
+```
+
 
 4. Find the average salary data of the three most frequent job titles in the data. 
 

@@ -1,0 +1,54 @@
+
+---
+output: 
+  html_document:
+  pdf_document: default
+  word_document: default
+title: "Assignment 10: Predictive Modeling - Part 1"
+---
+
+***How to do it?***: 
+
+- Open the Rmarkdown file of this assignment ([link](assignment10.Rmd)) in Rstudio. 
+
+- Right under each **question**, insert  a code chunk (you can use the hotkey `Ctrl + Alt + I` to add a code chunk) and code the solution for the question. 
+
+- `Knit` the rmarkdown file (hotkey: `Ctrl + Alt + K`) to export an html.  
+
+-  Publish the html file to your Githiub Page. 
+
+***Submission***: Submit the link on Github of the assignment to Canvas
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
+
+
+-------
+
+1. Use the `Adult Census Income` dataset.  We will predict the income (whether or not it is more than 50k or not) of an adult. Import the dataset.  Partition the data into 80% training and 20% testing.  
+
+2. Practice Decision Tree.  Do the follows:
+
+  - Use `rpart` package, create a decision tree with maximum depth of 3. 
+  
+  - Calculate the accuracy of the model on the testing data. Notice that the positive outcome here is not `1` but `>50K` or `<50K`. 
+  
+  - Plot the tree
+  
+  - Plot the variable importance by the tree
+  
+3. Create 3 more trees and compare the testing accuracy of these trees, which tree give the highest testing accuracy.
+
+4. Practice Random Forest.  Do the follows: 
+
+  - Use `randomForest` package, create a random forest of 1000 trees. 
+  
+  - Calculate the accuracy of the model on the testing data. 
+  
+  - Plot the variable importance by the forest
+
+5. Create 3 more forests and compare the testing accuracy of these forests, which forest give the highest testing accuracy.
+
+6. What is the best model (in term of testing accuracy) among all models (including trees and forests) you have trained?
+
