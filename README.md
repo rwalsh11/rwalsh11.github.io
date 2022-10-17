@@ -12,5 +12,5 @@ Created by: Ryan Walsh
 | [click for assignment 6](assignment6.html) |  |  |
 | [click for assignment 7](assignment7.html) |  | [Link to the plot](avgWage.png) |
 | [click for assignment 8](assignment8.html) |  |  |
-|  |  |  |
-|  |  |  |
+| [click for assignment 9](assignment9.html) |  |  |
+| [click for assignment 10](assignment10.html) |  |  |

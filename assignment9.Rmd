@@ -31,18 +31,78 @@ knitr::opts_chunk$set(message = FALSE)
 1. Use the dataset by of covid 19 by WHO at https://covid19.who.int/WHO-COVID-19-global-data.csv. Find the three countries with the most numbers of deaths by Covid-19. 
 
 Hint: 
+```{r}
+library(tidyverse)
+df <- read_csv("WHO-COVID-19-global-data.csv")
+```
+
 
 -  Use `filter` to select the most current date 
+```{r}
+
+df %>% filter(Date_reported == max(Date_reported))
+```
 
 -  Pipe with `arrange(-Cumulative_deaths)` to rank the data by the number of cumulative deaths
+```{r}
+df %>% filter(Date_reported == max(Date_reported)) %>% arrange(-Cumulative_deaths)
+```
 
 
 2. Use `transition_reveal` to make a plot revealing the number of deaths in the three countries with the most numbers of deaths
+```{r}
+library(gganimate)
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+df %>% filter(Date_reported == max(Date_reported)) %>% arrange(-Cumulative_deaths) %>% top_n(3,Cumulative_deaths) 
+
+plot1 <- df %>% filter(Country %in% c('United States of America','Brazil','India')) %>% 
+  ggplot(aes(y=Cumulative_deaths,
+            x=Date_reported,
+            color=Country))+ 
+  geom_line()+
+  geom_point(size=3)+
+  transition_reveal(Date_reported)
+plot1
+
+```
 
 3. Create the new variable (column) `death_per_cases` recording the number of deaths per cases (Hint: divide cumulative deaths by cumulative cases).  What are the three countries with the highest deaths per cases? 
+```{r}
+df$death_per_cases = df$Cumulative_deaths / df$Cumulative_cases
+df %>% filter(Date_reported == max(Date_reported)) %>% arrange(-death_per_cases) %>% top_n(3,death_per_cases)
+
+```
+
 
 4. Use `transition_reveal` to make a plot revealing the number of deaths per cases of the US, Italy and Mexico. 
+```{r}
+plot <- df %>% filter(Country %in% c('United States of America','Italy','Mexico')) %>% 
+  ggplot(aes(y=death_per_cases,
+            x=Date_reported,
+            color=Country))+ 
+  geom_line()+
+  geom_point(size=3)+
+  transition_reveal(Date_reported)
+plot
+```
+
 
 5. Import the following data https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv
                       
 Use `transition_reveal` to plot the total vaccinations per hundred by level of income. Hint: the levels of income are identified in the `location` variable. Put a short comment on the caption of the plot. 
+
+```{r}
+df <- read_csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv")
+
+plot <- df %>% filter(location %in% c("Lower middle income", "Low income", "Upper middle income")) %>% 
+  ggplot(aes(y=total_vaccinations_per_hundred,
+            x=date,
+            color=location))+ 
+  geom_line()+
+  geom_point(size=1)+
+  transition_reveal(date)
+plot
+```
+

@@ -1,0 +1,276 @@
+<style>
+
+.remark-slide-content {
+  background-color: #FFFFFF;
+  border-top: 80px solid #F9C389;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.5;
+  padding: 1em 2em 1em 2em
+}
+
+.inverse {
+  background-color: #696767;
+  border-top: 80px solid #696767;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 50% 75%;
+  background-size: 150px;
+}
+
+.your-turn{
+  background-color: #8C7E95;
+  border-top: 80px solid #F9C389;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 95% 90%;
+  background-size: 75px;
+}
+
+.title-slide {
+  background-color: #F9C389;
+  border-top: 80px solid #F9C389;
+  background-image: none;
+}
+
+.title-slide > h1  {
+  color: #111111;
+  font-size: 40px;
+  text-shadow: none;
+  font-weight: 400;
+  text-align: left;
+  margin-left: 15px;
+  padding-top: 80px;
+}
+.title-slide > h2  {
+  margin-top: -25px;
+  padding-bottom: -20px;
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 35px;
+  text-align: left;
+  margin-left: 15px;
+}
+.title-slide > h3  {
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 25px;
+  text-align: left;
+  margin-left: 15px;
+  margin-bottom: -30px;
+}
+
+</style>
+
+```{css, echo=FALSE}
+.left-code {
+  color: #777;
+  width: 40%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 59%;
+  float: right;
+  padding-left: 1%;
+}
+```
+
+```{r setup, include = FALSE}
+
+# R markdown options
+knitr::opts_chunk$set(echo = TRUE, 
+                      cache = TRUE, 
+                      fig.width = 10,
+                      fig.height = 5,
+                      fig.align = "center", 
+                      message = FALSE, 
+                      warning = FALSE)
+
+# Load packages
+library(gapminder)
+library(gganimate)
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+
+```
+
+# Transition: <font color="black"> Reveal </font>
+
+`transition_reveal`: Transition between *values* of a variable
+
+Principles:
+
+-  a time variable is mapped on one of the axes
+
+-  the time variable is also mapped to actual time (our clock)
+
+---
+# Data
+
+```{r,  message=FALSE, warning=FALSE}
+library(gganimate)
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+df$month <- month(df$date)
+```
+
+---
+# Static Plot
+
+.left-code[
+```{r step1281110, eval = FALSE, echo = TRUE}
+df %>% 
+  filter(state %in% c('NY')) %>% 
+  ggplot(aes(y=positive,
+            x=date))+ 
+  geom_line() #<<
+```
+]
+.right-plot[
+```{r, ref.label = "step1281110", echo = FALSE, cache = TRUE, fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Adding transition_reveal
+
+```{r, echo=FALSE}
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+df$month <- month(df$date)
+```
+
+
+.left-code[
+```{r step12811101, eval = FALSE, echo = TRUE}
+df %>% 
+  filter(state %in% c('NY')) %>% 
+  ggplot(aes(y=positive,
+            x=date))+ 
+  geom_line()+
+  transition_reveal(date) #<<
+  
+
+```
+]
+.right-plot[
+```{r, ref.label = "step12811101", echo = FALSE, cache = TRUE, fig.height = 6, fig.width = 7}
+```
+]
+
+
+---
+# Static Plot
+
+```{r, echo=FALSE}
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+df$month <- month(df$date)
+```
+
+
+.left-code[
+```{r step128111012, eval = FALSE, echo = TRUE}
+df %>% 
+  filter(state %in% c('NY','FL')) %>% 
+  ggplot(aes(y=positive,
+            x=date,
+            color=state))+ #<<
+  geom_line() 
+```
+]
+.right-plot[
+```{r, ref.label = "step128111012", echo = FALSE, cache = TRUE, fig.height = 6, fig.width = 7}
+```
+]
+
+
+---
+# Adding transition_reveal
+
+```{r, echo=FALSE}
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+df$month <- month(df$date)
+```
+
+
+.left-code[
+```{r step1281110121, eval = FALSE, echo = TRUE}
+df %>% 
+  filter(state %in% c('NY','FL')) %>% 
+  ggplot(aes(y=positive,
+            x=date,
+            color=state))+ 
+  geom_line()+
+  transition_reveal(date) #<<
+  
+
+```
+]
+.right-plot[
+```{r, ref.label = "step1281110121", echo = FALSE, cache = TRUE, fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Adding transition_reveal
+
+```{r, echo=FALSE}
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+df$month <- month(df$date)
+```
+
+
+.left-code[
+```{r step128111012111, eval = FALSE, echo = TRUE}
+df %>% 
+  filter(state %in% c('NY','FL')) %>% 
+  ggplot(aes(y=positive,
+            x=date,
+            color=state))+ 
+  geom_line()+
+  geom_point(size=3)+ #<<
+  transition_reveal(date) 
+  
+
+```
+]
+.right-plot[
+```{r, ref.label = "step128111012111", echo = FALSE, cache = TRUE, fig.height = 6, fig.width = 7}
+```
+]
+
+---
+# Adding transition_reveal
+
+```{r, echo=FALSE}
+df <- read_csv('https://covidtracking.com/data/download/all-states-history.csv')
+df$month <- month(df$date)
+```
+
+
+.left-code[
+```{r step112811101211, eval = FALSE, echo = TRUE}
+df %>% 
+  filter(state %in% c('NY','FL')) %>% 
+  ggplot(aes(y=positive,
+            x=date,
+            color=state))+ 
+  geom_line()+
+  geom_point(size=3)+
+  geom_text(aes(label = positive), 
+            hjust = -.1, size=5) + #<<
+  transition_reveal(date)
+  
+
+```
+]
+.right-plot[
+```{r, ref.label = "step112811101211", echo = FALSE, cache = TRUE, fig.height = 6, fig.width = 7}
+```
+]
