@@ -61,6 +61,40 @@ cm$overall[1]
 3. Train and test two models that are not `ranger`, `glmnet` or `rpart`  with caret. Plot the variable importance of the model. 
 
 ```{r}
+library(caret)
+df <- df %>% 
+  mutate(target = as.factor(target))
+df = drop_na(df)
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
 
+model1 <- train(target~., data=df_train, 
+                method = "rf",
+                maxdepth=3)
+pred <- predict(model1, df_test)
+cm <- confusionMatrix(data = pred, reference = df_test$target)
+cm$overall[1]
+plot(varImp(model1))
 ```
+```{r}
+library(caret)
+df <- df %>% 
+  mutate(target = as.factor(target))
+df = drop_na(df)
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+
+model2 <- train(target~., data=df_train, 
+                method = "rpart2",
+                maxdepth=3)
+pred <- predict(model1, df_test)
+cm <- confusionMatrix(data = pred, reference = df_test$target)
+cm$overall[1]
+plot(varImp(model2))
+```
+
 
