@@ -1,0 +1,29 @@
+---
+title: "Bryant Basketball"
+author: "Ryan Walsh"
+date: "2022-10-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(tidyverse)
+library(readxl)
+df <-read_excel("Bryant basketball data(2021 season stats for 22 roster).xlsx")
+view(df)
+```
+
+```{r}
+plot1 <- df %>% filter(Position %in% c('Gaurd')) %>% 
+  ggplot(aes(y=FTA,
+            x=Player,
+            ))+geom_col()
+plot1
+```
+
+

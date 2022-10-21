@@ -1,0 +1,388 @@
+<style>
+
+.remark-slide-content {
+  background-color: #FFFFFF;
+  border-top: 80px solid #F9C389;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.5;
+  padding: 1em 2em 1em 2em
+}
+
+.inverse {
+  background-color: #696767;
+  border-top: 80px solid #696767;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 50% 75%;
+  background-size: 150px;
+}
+
+.your-turn{
+  background-color: #8C7E95;
+  border-top: 80px solid #F9C389;
+  text-shadow: none;
+  background-image: url(https://github.com/goodekat/presentations/blob/master/2019-isugg-gganimate-spooky/figures/spider.png?raw=true);
+	background-position: 95% 90%;
+  background-size: 75px;
+}
+
+.title-slide {
+  background-color: #F9C389;
+  border-top: 80px solid #F9C389;
+  background-image: none;
+}
+
+.title-slide > h1  {
+  color: #111111;
+  font-size: 40px;
+  text-shadow: none;
+  font-weight: 400;
+  text-align: left;
+  margin-left: 15px;
+  padding-top: 80px;
+}
+.title-slide > h2  {
+  margin-top: -25px;
+  padding-bottom: -20px;
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 35px;
+  text-align: left;
+  margin-left: 15px;
+}
+.title-slide > h3  {
+  color: #111111;
+  text-shadow: none;
+  font-weight: 300;
+  font-size: 25px;
+  text-align: left;
+  margin-left: 15px;
+  margin-bottom: -30px;
+}
+
+</style>
+
+```{css, echo=FALSE}
+.left-code {
+  color: #777;
+  width: 40%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 59%;
+  float: right;
+  padding-left: 1%;
+}
+```
+
+```{r setup, include = FALSE}
+
+# R markdown options
+knitr::opts_chunk$set(echo = TRUE, 
+                      cache = TRUE, 
+                      fig.width = 10,
+                      fig.height = 5,
+                      fig.align = "center", 
+                      message = FALSE,
+                      warning = FALSE)
+
+# Load packages
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+library(knitr)
+```
+
+# Data
+
+```{r, echo=FALSE, eval=FALSE}
+# Read in the data
+library(tidyverse)
+df = read_csv("https://bryantstats.github.io/math421/data/titanic.csv")
+
+# Remove some columns
+df <- df %>% select(-PassengerId, -Ticket, -Name, -Cabin)
+
+
+# Set the target variable
+df <- df %>% rename(target=Survived)
+
+# Correct variables' types
+df <- df %>% 
+  mutate(target = as.factor(target),
+         Pclass = as.factor(Pclass),
+         )
+
+
+# Handle missing values
+# Replace NA of Age by its mean
+mean_age <- mean(df$Age, na.rm=TRUE)
+df$Age <- replace_na(df$Age, mean_age)
+
+df = drop_na(df)
+```
+
+
+```{r, echo=FALSE}
+kable(head(df))
+```
+
+- Passengers in the Titanic
+- `Target = 1` means the passenger was survived
+- `Target = 0` means the passenger was not survived
+
+---
+# Prediction Problem
+
+```{r, echo=FALSE}
+kable(head(df))
+```
+
+- We want to predict the `target` given the information of other variables.
+
+---
+# Import and Clean the data
+
+```{r}
+
+# Read in the data
+library(tidyverse)
+df = read_csv("https://bryantstats.github.io/math421/data/titanic.csv")
+```
+---
+# Set the Target Variable
+
+- It's a common practice that the target variable named `target`
+
+```{r}
+# Take out some columns
+df <- df %>% select(-PassengerId, -Ticket, -Name, -Cabin)
+
+# Set the target variable
+df <- df %>% rename(target=Survived)
+
+```
+
+---
+# Correct Variables' Types
+
+- Make sure all categorical variables are factors. 
+
+```{r}
+# Correct variables' types
+df <- df %>% 
+  mutate(target = as.factor(target),
+         Pclass = as.factor(Pclass),
+         )
+
+```
+
+---
+# Handle Missing Values
+
+- Make sure there are no missing values
+
+```{r}
+# Replace NA of Age by its mean
+mean_age <- mean(df$Age, na.rm=TRUE)
+df$Age <- replace_na(df$Age, mean_age)
+
+# Drop all rows that has an NA
+df = drop_na(df)
+```
+
+---
+# Split the data to training and testing
+
+- Make sure to set.seed to that the results are reproducible. 
+
+```{r}
+library(caret)
+set.seed(2020)
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+
+```
+
+---
+# Create a tree
+```{r}
+library(rpart) #load the rpart package
+
+# Create a tree
+tree_model <- rpart(target ~ ., data = df_train,
+                 control = rpart.control(maxdepth = 3))
+
+
+```
+
+---
+# Plot the tree
+```{r}
+library(rattle)
+fancyRpartPlot(tree_model)
+```
+
+---
+# Variable importances
+
+```{r}
+tree_model$variable.importance
+```
+
+---
+# Variable importances
+
+```{r}
+barplot(tree_model$variable.importance)
+```
+
+---
+# Evaluate the tree
+
+```{r}
+#predict on testing data
+pred <- predict(tree_model, df_test, type = "class")
+
+#Evaluate the predictions
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+cm$overall[1]
+```
+
+---
+# Evaluate the tree
+
+```{r, echo=FALSE}
+kable(data.frame(Metric = cm$overall))
+```
+
+---
+# Evaluate the tree
+
+```{r, echo=FALSE}
+kable(data.frame(Metric = cm$byClass))
+```
+
+---
+# Random Forest 
+
+- Random Forest is a collection of decision trees
+
+- Random Forest predict by the majority vote between the trees
+
+- For example:  if 51 trees in a forest of 100 trees predict passenger A `survived`, then the forest also predict passenger A `survived`
+
+- Trees are trained only a subset of the original data 
+
+- Only random of few variables are considered at each split
+
+---
+# Random Forest
+
+```{r}
+library(randomForest)
+forest_model = randomForest(target ~ ., data=df_train, ntree = 500)
+pred <- predict(forest_model, df_test, type = "class")
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+
+cm$overall[1]
+```
+
+---
+# Variable importances
+
+```{r}
+importance(forest_model)
+
+```
+
+---
+# Evaluate the Forest
+
+```{r, echo=FALSE}
+kable(data.frame(Metric = cm$overall))
+```
+
+---
+# Evaluate the Forest
+
+```{r, echo=FALSE}
+kable(data.frame(Metric = cm$byClass))
+```
+
+```{r, echo=FALSE, eval=FALSE}
+# On Adult data
+
+library(tidyverse)
+library(caret)
+
+df <- read_csv('https://bryantstats.github.io/math421/data/adult_census.csv')
+
+df <- df %>% rename(target = income)
+df <- df %>% mutate(target = as.factor(target))
+
+
+set.seed(2020)
+splitIndex <- createDataPartition(df$target, p = .70, 
+                                  list = FALSE)
+df_train <- df[ splitIndex,]
+df_test <- df[-splitIndex,]
+
+library(rpart) #load the rpart package
+
+# Create a tree
+tree_model <- rpart(target ~ ., data = df_train,
+                 control = rpart.control(maxdepth = 3))
+
+library(rattle)
+fancyRpartPlot(tree_model)
+
+barplot(tree_model$variable.importance)
+
+#predict on testing data
+pred <- predict(tree_model, df_test, type = "class")
+
+#Evaluate the predictions
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = ">50K")
+cm$overall[1]
+
+library(randomForest)
+forest_model = randomForest(target ~ ., data=df_train, ntree = 500)
+pred <- predict(forest_model, df_test, type = "class")
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = ">50K")
+
+cm$overall[1]
+
+```
+
+```{r, eval=FALSE, echo=FALSE}
+model1 <- train(target~., data=df_train, 
+                method = "rpart2", #<<
+                maxdepth=3)
+
+pred <- predict(model1, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = ">50K")
+
+cm$overall[1]
+
+
+model1 <- train(target~., data=df_train, 
+                method = "ranger", #<<
+                num_trees=30)
+
+pred <- predict(model1, df_test)
+
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = ">50K")
+
+cm$overall[1]
+
+```
+
