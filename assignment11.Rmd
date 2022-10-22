@@ -56,6 +56,7 @@ model1 <- train(target~., data=df_train,
 pred <- predict(model1, df_test)
 cm <- confusionMatrix(data = pred, reference = df_test$target)
 cm$overall[1]
+plot(varImp(model1))
 ```
 
 3. Train and test two models that are not `ranger`, `glmnet` or `rpart`  with caret. Plot the variable importance of the model. 
