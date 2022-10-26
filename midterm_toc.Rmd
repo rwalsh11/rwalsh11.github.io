@@ -1,0 +1,377 @@
+
+---
+title: "Math 421 - Midterm"
+output:
+  html_document:
+    toc: yes
+    toc_float: yes
+    theme: united
+  word_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+## Instruction
+
+The midterm has two components: the Rmarkdown notebook (html) and the presentation.  We will do the presentation in class. Post both the notebook and the presentation on your Github page. 
+
+**The notebook:** The notebook should be created using `rmarkdown` (like other assignments). The notebook should have a title. It should have a table of content (TOC form) or in a tab form. The Rmd files of Tab and Toc form are available on the class webpage. 
+
+**The Presentation:** Present your results in 5-10 minutes. To make the presentation using Rmarkdown, do the follows: 
+
+    - In Rstudio -> File -> New File -> R markdown
+    
+    - In the left panel, click to Presentation -> Click OK
+    
+    - Now you have an Rmarkdown that can be knitted to be a html presentation 
+    
+- You can also use Rmd samples of the class slides that are available on the class webpage. 
+    
+- You do not need to rerun all the codes for the presentation. For example, to show the model comparison, you just need to show the image of the model comparison instead of running all the models again.
+    
+- To inset an image in a slide, use  `![](image.png)`
+
+- To scale images, you can follow these below instructions. 
+    
+    - https://bookdown.org/yihui/rmarkdown-cookbook/figure-size.html
+    
+    - http://zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/
+
+- To turn off message and warning of a code cell, use:  `{r, message=FALSE, warning=FALSE}` for the cell. 
+
+**What to present**:
+
+  - Present Part 2 - Visualization
+  
+  - Present Question Question 4, 5 and 6 in Part 3.  
+  
+  - Present any errors/challenges you run into and how you fix/overcome them. 
+
+**Data:**  
+
+The data for the mid-term project is the Rhode Island Department of Health Hospital Discharge Data.  Each row of the data presents a patient. 
+
+Link: https://drive.google.com/open?id=15QNBf6YYKocK2nNIfpKDer58kQnCPNZJ 
+
+-------
+
+## I. Data Wranggling
+
+1. Download the data file `hdd0318cy.sas7bdat`.  
+
+2. Use `read_sas` in library `haven` to read the data.
+
+```{r, eval=FALSE}
+library(haven)
+setwd("C:\\Users\\student\\Desktop")
+df <- read_sas("hdd0318cy.sas7bdat")
+setwd("C:/Users/student/Desktop/R Math421/rwalsh11.github.io/")
+
+```
+
+    
+3. Filter the data to have only patients of the year 2018 (`yod=2018`)
+```{r, eval=FALSE}
+library(tidyverse)
+df1 <- df %>% filter(yod=='18')
+
+```
+
+    
+4. Select to work with only following variables: 
+
+
+ 
+```{r, eval=FALSE}
+library(dplyr)
+df1 <- df1 %>% select("yod", "payfix","pay_ub92","age",  
+                      "sex","raceethn","provider","moa", 
+                      "yoa","mod","admtype", "asource" , 
+                      "preopday" ,"los", "service" , "icu","ccu",    
+                      "dispub92", "payer"  ,"drg","trandb", 
+                      "randbg","randbs","orr", "anes","seq",   
+                      "lab","dtest", "ther","blood","phar", 
+                      "other","patcon","bwght","total","tot" ,  
+                      "ecodub92","b_wt","pt_state","diag_adm","ancilar" ,
+                      "campus","er_fee","er_chrg","er_mode","obs_chrg",
+                      "obs_hour","psycchrg","nicu_day")
+library(tidyverse)
+write_csv(df1, 'midterm.csv')
+```
+ 
+
+*Notice*:  You may want to save the current data to your computer for easy access later.  To save the data file use `write_csv(df, 'midterm.csv')`, for example.  
+
+5. What are variables that have missing values?
+```{r}
+library(tidyverse)
+df1 <- read_csv("midterm.csv")
+colSums(is.na(df1))
+
+```
+
+ 
+6. Remove all variables with missing values. 
+```{r}
+df1 %>% select(-nicu_day,-er_mode,-obs_chrg,-ecodub92,-payfix)
+```
+
+ 
+7. Refer to the data description in the file `HDD2015-18cy6-20-19.docx`, which variable recording the month of admission?, which variable recording the month of discharge?
+```{r}
+table(df1$moa)
+table(df1$mod)
+#neither of these work(having major trouble viewing data)
+```
+
+8. Which month admitted the most number of patients? Which month admitted the most number of male patients?
+```{r}
+df1 %>% arrange(-tot) %>% filter(sex == 1)
+```
+
+9. Which month has the most number of teenage female patients?
+```{r}
+df1 %>% arrange(-moa) %>% filter(sex == 2, age <= 18)
+```
+
+
+10. Which provider has the most number of female patients in October? 
+```{r}
+df1 %>% group_by(sex == 2,moa ==10) 
+```
+
+11. Are female patients older than male patients, on average? 
+```{r}
+d1 <- df1 %>% group_by(sex == 1) %>% summarise(mean = mean(age))
+d2 <- df1 %>% group_by(sex == 2) %>% summarise(mean = mean(age))
+d1
+d2
+```
+
+12. Calculate the average age of patients by months. Which month has the oldest patients on average age?
+```{r}
+d3 <- df1 %>% group_by(moa) %>% summarise(mean = mean(age))
+d3
+```
+
+
+13. What is the name of the provider that has the highest total charge?
+```{r}
+d4 <- df1 %>% group_by(provider) 
+head(d4, n = 10)
+```
+
+14. What is the name of the provider that has the least total charge for teenage male on average?
+
+```{r}
+df1$trandb <- as.numeric(df1$trandb)
+df1 %>% filter(sex == 1) %>%  group_by(provider) %>% summarise(mean = mean(trandb))
+```
+
+15. Create a season (Spring, Summer, Fall, Winter) variable. Calculate the length of stays by season.  Which season has the longest length of stays on average?
+```{r}
+
+df1$season <- case_when(df1$moa %in% c("3","4","5") ~ 'spring',
+                       df1$moa %in% c("6","7","8") ~ 'summer', df1$moa %in% c("9","10","11") ~ 'fall', df1$moa %in% c("12","1","2") ~ 'winter')
+
+df1 %>% group_by(season) %>% summarise(mean = mean(los))
+```
+
+
+16. On average, how much a 20 year-old male get charged for staying 1 day in the Fall season?
+```{r}
+
+df1 %>% filter(sex == 1, los == 1, age == 20, season == "fall")
+```
+
+17. Write a paragraph to summarize the section and give your comments on the results. You could do some other calculations to support your points. 
+
+-------
+
+## II. Data Visualization
+
+Continue with the data from part I. 
+
+1. Provides at least 10 meaningful plots. Comments on the plots. All plots should have title, caption, appropriate labels on x and y-axis
+```{r, eval=FALSE}
+df1 %>% ggplot(aes(x = moa,
+           y = tot, color=sex))+
+  geom_point()
+  labs(title = 'moa: {closest_state}')
+```
+
+
+2. Make an animation plot. 
+```{r}
+library(gganimate)
+library(ggplot2)
+library(tidyverse)
+library(lubridate)
+plot1 <- df1 %>% filter(season %in% c('fall','summer','spring','winter')) %>% 
+  ggplot(aes(y=trandb,
+            x=los,
+            color=season))+ 
+  geom_point()
+plot1
+```
+
+
+3. Write a paragraph to summarize the section and give your comments on the results. 
+
+-------
+
+## III. Predictive Models
+
+Continue with the data from part I. Make sure you do not have any missing values in the data. Use the follows as the target and input variables: 
+
+*Target Variable*: Create the target variable taking value of 
+
+  - `low` if the total charge of a patient (`tot`) is smaller than the median of the total charge, and
+```{r}
+df1 %>% 
+  summarise(median(tot))
+```
+  
+```{r}
+library(tidyverse)
+library(dplyr)
+df1$tot <- case_when(
+  df1$tot <16228	 ~ 'low',
+  TRUE ~ 'high'
+)
+df1 <- df1 %>% rename(target=tot)
+
+df1 <- df1 %>% 
+  mutate(target = as.factor(target),)
+df2 <- df1 %>% select(age,sex,raceethn,provider,moa,mod,admtype,campus, los,target)
+```
+
+  - `high` otherwise. 
+
+*Input Variables*:
+
+  - "age","sex","raceethn","provider","moa","mod","admtype","campus", 'los'
+  
+  
+```{r}
+df2 <- df1 %>% select(age,sex,raceethn,provider,moa,mod,admtype,campus, los,target)
+```
+1. Use `filter` function to filter out rows where `raceethn==''` or `raceethn==''`. Make sure all the categorical variables are factor, numeric variables are numeric. Set Training : Testing Split = 10 : 90
+  
+```{r, eval=FALSE}
+library(caret)
+set.seed(2020)
+df2 <- (df2 %>%  select(raceethn) %>% filter(-raceethn=='') ) 
+splitIndex <- createDataPartition(df2$target, p = .10, 
+                                  list = FALSE)
+df_train <- df2[ splitIndex,]
+df_test <- df2[-splitIndex,]
+```
+  
+-------
+
+ 
+
+2. Train a decision tree using `rpart`.  Plot the decision tree. Plot the variable importance ranked by the tree. 
+```{r}
+library(rpart)
+tree_model <- rpart(target ~ ., data = df_train,
+                 control = rpart.control(maxdepth = 3))
+library(rattle)
+fancyRpartPlot(tree_model)
+tree_model$variable.importance
+barplot(tree_model$variable.importance)
+pred <- predict(tree_model, df_test, type = "class")
+cm <- confusionMatrix(data = pred, reference = df_test$target, positive = "1")
+cm$overall[1]
+```
+
+3. Using caret for this question. Set `Training Control` to be: Use Cross-Validation of 5 folds across all models.  Train & tune at least 2 different models (i.e. two different values for `method=` in the train function of caret).  Plot the hyper-parameter tuning plots for each model. 
+```{r}
+library(caret)
+
+tuneGrid = expand.grid(maxdepth = 2:10)
+
+trControl = trainControl(method = "cv",
+                         number = 5)
+
+tree_approach2 <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl,
+                                tuneGrid = tuneGrid)
+
+```
+
+```{r}
+library(caret)
+
+tuneGrid = expand.grid(maxdepth = 2:10)
+
+trControl = trainControl(method = "cv",
+                         number = 5)
+
+tree_approach3 <- train(target~., data=df_train, 
+                                method = "rf", 
+                                trControl = trControl,
+                                tuneGrid = tuneGrid)
+
+```
+
+
+4. Plot the comparison of the models in 3. 
+```{r}
+plot(tree_approach2)
+print(tree_approach2)
+pred <- predict(tree_approach2, df_test)
+cm0 <- confusionMatrix(data = pred, reference = df_test$target)
+cm0$overall[1]
+```
+
+
+```{r}
+plot(tree_approach3)
+print(tree_approach3)
+pred <- predict(tree_approach3, df_test)
+cm1 <- confusionMatrix(data = pred, reference = df_test$target)
+cm1$overall[1]
+```
+
+
+5. What is your final selection for the model? Test the accuracy of your final model on the test data. 
+
+6. Create another `target` variable (binary), decide the input variables and redo 1 to 5. 
+```{r}
+df1 <- df1 %>% rename(target=los)#new target(have not established anything else)
+
+df1 <- df1 %>% 
+  mutate(target = as.factor(target),)
+df2 <- df1 %>% select(age,sex,raceethn,provider,moa,mod,admtype,campus, los,target)
+library(caret)
+set.seed(2020) 
+df2 <- (df2 %>%  select(raceethn) %>% filter(-raceethn=='') ) 
+splitIndex <- createDataPartition(df2$target, p = .10, 
+                                  list = FALSE)
+df_train <- df2[ splitIndex,]
+df_test <- df2[-splitIndex,]
+
+tuneGrid = expand.grid(maxdepth = 2:10)
+
+trControl = trainControl(method = "cv",
+                         number = 5)
+
+tree_approach2 <- train(target~., data=df_train, 
+                                method = "rpart2", 
+                                trControl = trControl,
+                                tuneGrid = tuneGrid)
+```
+
+7. Write a paragraph to summarize the section and give your comments on the results. 
+
+-------
