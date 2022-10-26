@@ -16,3 +16,4 @@ Created by: Ryan Walsh
 | [click for assignment 10](assignment10.html) |  |  |
 | [click for assignment 11](assignment11.html) | | |
 | [click for assignment 12](assignment12.html)| | |
+|[click for midterm!](Midterm_toc.html)|||
